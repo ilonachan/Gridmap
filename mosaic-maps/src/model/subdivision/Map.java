@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.util.List;
 import model.graph.AbstractEdge;
 import model.graph.AbstractVertex;
-import model.graph.CrossingFinder;
+// import model.graph.CrossingFinder;
 import model.graph.GenericGraph;
 import model.graph.PlanarStraightLineGraph;
 import model.util.Position2D;

@@ -757,7 +757,7 @@ public abstract class MosaicCartogram {
                     if (!connectors.contains(c)) {
                         boolean alreadyIn = false;
                         for (int j = 0; j < numHexagons - connectors.size() - 1; j++) {
-                            WeightedObject wo = sortedIntersected.get(j);
+                            WeightedObject<Coordinate, Double> wo = sortedIntersected.get(j);
                             if (wo.getObject().equals(c)) {
                                 alreadyIn = true;
                                 break;
@@ -1287,7 +1287,7 @@ public abstract class MosaicCartogram {
         }
 
         public void setCoordinates(Set<Coordinate> coordinates) {
-            this.coordinates = new LinkedHashSet(coordinates);
+            this.coordinates = new LinkedHashSet<>(coordinates);
         }
 
         public final MosaicCartogram containingCartogram() {

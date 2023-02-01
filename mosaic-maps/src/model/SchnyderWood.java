@@ -21,9 +21,7 @@ public class SchnyderWood {
 
     private final Network graph;
     private final PlanarSubdivision subdivision;
-    private final ElementList<PlanarSubdivision.Vertex> parentT1;
-    private final ElementList<PlanarSubdivision.Vertex> parentT2;
-    private final ElementList<PlanarSubdivision.Vertex> parentT3;
+    private final ElementList<PlanarSubdivision.Vertex> parents;
     private final Network.Vertex rootT1;
     private final Network.Vertex rootT2;
     private final Network.Vertex rootT3;
@@ -31,9 +29,7 @@ public class SchnyderWood {
     public SchnyderWood(Network graph, PlanarSubdivision subdivision) {
         this.graph = new Network(graph);
         this.subdivision = subdivision;
-        this.parentT1 = new ElementList<>(graph.numberOfVertices(), null);
-        this.parentT2 = new ElementList<>(graph.numberOfVertices(), null);
-        this.parentT3 = new ElementList<>(graph.numberOfVertices(), null);
+        this.parents = new ElementList<>(graph.numberOfVertices(), null);
         if (!PlanarSubdivisionAlgorithms.isTriangulation(subdivision)) {
             throw new RuntimeException("input graph must be a triangulation");
         }
@@ -51,12 +47,12 @@ public class SchnyderWood {
         rootT2 = this.graph.getVertex(sRootT2.getId());
         rootT3 = this.graph.getVertex(sRootT3.getId());
         execute(graph.numberOfVertices());
-        parentT1.set(rootT2, subdivision.getVertex(rootT1.getId()));
-        parentT1.set(rootT3, subdivision.getVertex(rootT1.getId()));
+        parents.set(rootT2, subdivision.getVertex(rootT1.getId()));
+        parents.set(rootT3, subdivision.getVertex(rootT1.getId()));
     }
 
     public ElementList<PlanarSubdivision.Vertex> getParents() {
-        return parentT1;
+        return parents;
     }
 
     private void execute(int numActive) {
@@ -96,10 +92,10 @@ public class SchnyderWood {
             execute(numActive - 1);
             for (Network.Vertex v : neighboursX) {
                 if (v != rootT1 && !commonNeighboursX.contains(v)) {
-                    parentT1.set(v, subdivision.getVertex(x.getId()));
+                    parents.set(v, subdivision.getVertex(x.getId()));
                 }
             }
-            parentT1.set(x, subdivision.getVertex(rootT1.getId()));
+            parents.set(x, subdivision.getVertex(rootT1.getId()));
         }
     }
 

@@ -7,15 +7,12 @@ import java.util.List;
 import java.util.Set;
 import Utils.Utils;
 import algorithms.ExperimentLog;
-import java.util.Collection;
 import java.util.HashSet;
-import model.Cartogram.MosaicCartogram.Cell;
 import model.HexagonalMap.BarycentricCoordinate;
 import model.SquareMap.EuclideanCoordinate;
 import model.Cartogram.MosaicCartogram.Coordinate;
 import model.Cartogram.MosaicCartogram.MosaicRegion;
 import model.graph.ConnectedComponents;
-import model.graph.CrossingFinder;
 import model.graph.Digraph;
 import model.graph.StronglyConnectedComponents;
 import model.subdivision.Map;
@@ -134,6 +131,8 @@ public class ComponentManager {
             embedder.computeOrderlySpanningTreeSchnyder();
             embedder.computeHeights();
             MosaicCartogram componentCartogram = createCartogram(componentMap, componentWeakDual);
+            // This seems like it could have been done at the end, or even separate from
+            // this function entirely!
             componentCartogram.computeDesiredRegions(unitData, guidingShapeSamples);
             embedder.initializeCartogram(componentCartogram);
             component.setCartogram(componentCartogram);
@@ -175,7 +174,7 @@ public class ComponentManager {
             }
         }
 
-        HashMap<Set<Digraph.Vertex>, Double> distanceList = new HashMap();
+        HashMap<Set<Digraph.Vertex>, Double> distanceList = new HashMap<>();
 
         for (Set<Digraph.Vertex> graphComponent : scc.components()) {
             if (graphComponent.equals(largestSet)) {
@@ -192,7 +191,7 @@ public class ComponentManager {
             }
         }
         //simple insertion sort
-        List<Set<Digraph.Vertex>> sortedComponentsList = new ArrayList();
+        List<Set<Digraph.Vertex>> sortedComponentsList = new ArrayList<>();
         sortedComponentsList.add(largestSet);
 
         while (!distanceList.isEmpty()) {
@@ -237,7 +236,7 @@ public class ComponentManager {
 
         Component largestComponent = getLargestComponent(scc);
 
-        List<Component> placedComponents = new ArrayList();
+        List<Component> placedComponents = new ArrayList<>();
 
         //place the initial component
         placedComponents.add(largestComponent);
@@ -274,7 +273,7 @@ public class ComponentManager {
 
                     //update both the region and the cartogram now that we know the offset.
                     //updating region is required for placing next regions.
-                    Set<Coordinate> coordinates = new HashSet();
+                    Set<Coordinate> coordinates = new HashSet<>();
                     for (Coordinate c : region) {
                         c = c.plus(offSet);
                         cartogram.setVertex(c, originalVertex);
@@ -319,7 +318,7 @@ public class ComponentManager {
                     double squaredLength = difference.getX() * difference.getX() + difference.getY() * difference.getY();
                     if (squaredLength < bestLength) {
                         bestLength = squaredLength;
-                        bestCentroids = new Pair(curCentroid, placedCentroid);
+                        bestCentroids = new Pair<>(curCentroid, placedCentroid);
 
                         //find the region belonging to this face
                         MosaicRegion region = null;
@@ -337,7 +336,7 @@ public class ComponentManager {
         Vector2D dirVector = Vector2D.difference(bestCentroids.getFirst(), bestCentroids.getSecond());
         double angle = getAngleOffset(dirVector);
 
-        return new Pair(bestCoordinate, angle);
+        return new Pair<>(bestCoordinate, angle);
 //        Vector2D cMiddle = placedComponent.get(0).componentMap.getAverageCentroid();
 //        Vector2D cCurrent = curComponent.componentMap.getAverageCentroid();
 //        Vector2D dirVector = Vector2D.difference(cCurrent, cMiddle);
@@ -427,7 +426,7 @@ public class ComponentManager {
         return g;
     }
 
-    private boolean hasConflict(MosaicCartogram cartogram, Coordinate offset, Iterable<Coordinate> coordinates) {
+    private boolean hasConflict(MosaicCartogram cartogram, Coordinate offset, Iterable<? extends Coordinate> coordinates) {
         for (Coordinate c : coordinates) {
             Coordinate offSettedC = c.plus(offset);
             if (cartogram.getVertex(offSettedC) != null) {
@@ -445,22 +444,22 @@ public class ComponentManager {
         return false;
     }
 
-    private boolean hasConflict(MosaicCartogram cartogram, ArrayList<Coordinate> coordinates) {
-        for (Coordinate c : coordinates) {
-            if (cartogram.getVertex(c) != null) {
-                //the cartogram on this spot is already filled
-                return true;
-            } else {
-                for (Coordinate d : c.neighbours()) {
-                    if (cartogram.getVertex(d) != null) {
-                        //one of the neighbours of c is already filled.
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
+    // private boolean hasConflict(MosaicCartogram cartogram, ArrayList<Coordinate> coordinates) {
+    //     for (Coordinate c : coordinates) {
+    //         if (cartogram.getVertex(c) != null) {
+    //             //the cartogram on this spot is already filled
+    //             return true;
+    //         } else {
+    //             for (Coordinate d : c.neighbours()) {
+    //                 if (cartogram.getVertex(d) != null) {
+    //                     //one of the neighbours of c is already filled.
+    //                     return true;
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     return false;
+    // }
 
     private double getAngleOffset(Vector2D dirVector) {
         return Math.toDegrees(Math.atan2(dirVector.getY(), dirVector.getX()));
@@ -520,35 +519,35 @@ public class ComponentManager {
         return distance;
     }
 
-    private Coordinate getCentroid(Iterable<MosaicRegion> regions) {
+//     private Coordinate getCentroid(Iterable<MosaicRegion> regions) {
 
-        Class<? extends Coordinate> coordinateClass = null;
-        for (MosaicRegion r : regions) {
-            coordinateClass = r.barycenter().getClass();
-            break;
-        }
-        Coordinate centroid = null;
+//         Class<? extends Coordinate> coordinateClass = null;
+//         for (MosaicRegion r : regions) {
+//             coordinateClass = r.barycenter().getClass();
+//             break;
+//         }
+//         Coordinate centroid = null;
 
-        if (coordinateClass == BarycentricCoordinate.class) {
-            centroid = new BarycentricCoordinate(0, 0, 0);
-        } else if (coordinateClass == EuclideanCoordinate.class) {
-            centroid = new EuclideanCoordinate(0, 0);
-        }
+//         if (coordinateClass == BarycentricCoordinate.class) {
+//             centroid = new BarycentricCoordinate(0, 0, 0);
+//         } else if (coordinateClass == EuclideanCoordinate.class) {
+//             centroid = new EuclideanCoordinate(0, 0);
+//         }
 
-        double count = 0;
-        for (MosaicRegion r : regions) {
-            Coordinate barycenter = r.barycenter();
-            centroid = centroid.plus(barycenter);
-            count++;
-        }
-        double div = 1 / count;
-        centroid = centroid.times(div);
-//        int x = (int) Math.ceil(((double) centroid.getX()) * div);
-//        int y = (int) Math.ceil(((double) centroid.getY()) * div);
-//        int z = (int) Math.ceil(((double) centroid.getZ()) * div);
-//        centroid = new BarycentricCoordinate(x, y, z);
-        return centroid;
-    }
+//         double count = 0;
+//         for (MosaicRegion r : regions) {
+//             Coordinate barycenter = r.barycenter();
+//             centroid = centroid.plus(barycenter);
+//             count++;
+//         }
+//         double div = 1 / count;
+//         centroid = centroid.times(div);
+// //        int x = (int) Math.ceil(((double) centroid.getX()) * div);
+// //        int y = (int) Math.ceil(((double) centroid.getY()) * div);
+// //        int z = (int) Math.ceil(((double) centroid.getZ()) * div);
+// //        centroid = new BarycentricCoordinate(x, y, z);
+//         return centroid;
+//     }
 
     private Coordinate getNullCoordinate(MosaicCartogram componentCartogram) {
         ArrayList<Coordinate> componentCoordinates = new ArrayList<>(componentCartogram.numberOfCells());
@@ -565,15 +564,15 @@ public class ComponentManager {
         return null;
     }
 
-    private Coordinate getNullCoordinate(Coordinate c) {
-        if (c.getClass() == BarycentricCoordinate.class) {
-            return new BarycentricCoordinate(0, 0, 0);
-        } else if (c.getClass() == EuclideanCoordinate.class) {
-            return new EuclideanCoordinate(0, 0);
-        }
-        System.err.println("Need new null offset, not yet implemented");
-        return null;
-    }
+    // private Coordinate getNullCoordinate(Coordinate c) {
+    //     if (c.getClass() == BarycentricCoordinate.class) {
+    //         return new BarycentricCoordinate(0, 0, 0);
+    //     } else if (c.getClass() == EuclideanCoordinate.class) {
+    //         return new EuclideanCoordinate(0, 0);
+    //     }
+    //     System.err.println("Need new null offset, not yet implemented");
+    //     return null;
+    // }
 
     private Coordinate getBestOffset(Component curComponent, List<Component> placedComponents, MosaicCartogram cartogram, MosaicCartogram componentCartogram) {
 
@@ -595,10 +594,10 @@ public class ComponentManager {
         Coordinate extraOffSet = nullCoordinate;
         Coordinate totalOffSet = baseOffSet.plus(extraOffSet);
 
-        Iterable<Coordinate> coordinates = (Iterable<Coordinate>) componentCartogram.coordinates();
+        Iterable<? extends Coordinate> coordinates = componentCartogram.coordinates();
 
         //holds which coordinates have already been tried
-        Set<Coordinate> attempted = new HashSet();
+        Set<Coordinate> attempted = new HashSet<>();
         attempted.add(nullCoordinate);
 
         while (hasConflict(cartogram, totalOffSet, coordinates)) {
@@ -611,21 +610,21 @@ public class ComponentManager {
         return totalOffSet;
     }
 
-    private boolean boundingBoxComponentIntersect(Component c1, Component c2) {
-        double minX = Double.MAX_VALUE;
-        double maxX = Double.MIN_VALUE;
-        double minY = Double.MAX_VALUE;
-        double maxY = Double.MIN_VALUE;
-        for (Coordinate c : c1.componentCartogram.coordinates()) {
-            double x = c.toPoint2D().getX();
-            double y = c.toPoint2D().getY();
-            minX = Math.min(x, minX);
-            maxX = Math.max(x, maxX);
-            minY = Math.min(y, minY);
-            maxY = Math.max(y, maxY);
-        }
-        return false;
-    }
+    // private boolean boundingBoxComponentIntersect(Component c1, Component c2) {
+    //     double minX = Double.MAX_VALUE;
+    //     double maxX = Double.MIN_VALUE;
+    //     double minY = Double.MAX_VALUE;
+    //     double maxY = Double.MIN_VALUE;
+    //     for (Coordinate c : c1.componentCartogram.coordinates()) {
+    //         double x = c.toPoint2D().getX();
+    //         double y = c.toPoint2D().getY();
+    //         minX = Math.min(x, minX);
+    //         maxX = Math.max(x, maxX);
+    //         minY = Math.min(y, minY);
+    //         maxY = Math.max(y, maxY);
+    //     }
+    //     return false;
+    // }
 
     public class Component implements Identifier {
 

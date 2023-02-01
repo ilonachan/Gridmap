@@ -1,18 +1,17 @@
 package model;
 
 import model.Cartogram.MosaicCartogram;
-import java.awt.Color;
-import java.util.ArrayDeque;
+// import java.awt.Color;
+// import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedList;
+// import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
+// import java.util.ListIterator;
 import Utils.Utils;
 import model.HexagonalMap.BarycentricCoordinate;
 import model.Cartogram.MosaicCartogram.Coordinate;
 import model.SquareMap.EuclideanCoordinate;
-import model.graph.CrossingFinder;
 import model.subdivision.Map;
 import model.subdivision.PlanarSubdivision;
 import model.subdivision.PlanarSubdivisionAlgorithms;
@@ -31,9 +30,9 @@ public class GridEmbedder {
     // Class variables
     private final Network originalGraph;
     private final Network graph;
-    private final Map map;
+    // private final Map map;
     private final PlanarSubdivision subdivision;
-    private final ElementList<Boolean> deleted;
+    // private final ElementList<Boolean> deleted;
     private ElementList<PlanarSubdivision.Vertex> parent;
     private final ElementList<Integer> labels;
     private final ElementList<Integer> heights;
@@ -43,11 +42,11 @@ public class GridEmbedder {
     // Extra vertices to form an outer triangular face
     private final PlanarSubdivision.Vertex top;
     private final PlanarSubdivision.Vertex left;
-    private final PlanarSubdivision.Vertex right;
-    // Variables to visualize the OST algorithm
-    private static final boolean DRAW_STEPS = false;
-    private ElementList<Boolean> deletedEdge;
-    private int stepCounter;
+    // private final PlanarSubdivision.Vertex right;
+    // // Variables to visualize the OST algorithm
+    // private static final boolean DRAW_STEPS = false;
+    // private ElementList<Boolean> deletedEdge;
+    // private int stepCounter;
 
     public GridEmbedder(Map map, Network originalGraph) {
 //        Map.Face greece = map.getFace("GRC");
@@ -65,7 +64,7 @@ public class GridEmbedder {
 //        debug only
 //        IpeExporter.exportGraph(originalGraph, "dual.ipe");
         this.graph = new Network(originalGraph);
-        this.map = map;
+        // this.map = map;
         addOuterFace();
 
         triangulateFaces();
@@ -79,9 +78,9 @@ public class GridEmbedder {
         }
         this.top = subdivision.getVertex(originalGraph.numberOfVertices());
         this.left = subdivision.getVertex(originalGraph.numberOfVertices() + 1);
-        this.right = subdivision.getVertex(originalGraph.numberOfVertices() + 2);
+        // this.right = subdivision.getVertex(originalGraph.numberOfVertices() + 2);
         this.parent = new ElementList<>(subdivision.numberOfVertices(), null);
-        this.deleted = new ElementList<>(subdivision.numberOfVertices(), false);
+        // this.deleted = new ElementList<>(subdivision.numberOfVertices(), false);
         this.labels = new ElementList<>(subdivision.numberOfVertices(), null);
         this.heights = new ElementList<>(subdivision.numberOfVertices(), null);
         this.subtreeWidth = new ElementList<>(subdivision.numberOfVertices(), null);
@@ -262,45 +261,45 @@ public class GridEmbedder {
         return graph;
     }
 
-    /**
-     * Implementation of the algorithm described in "Orderly Spanning Trees with
-     * Applications", Chiang et al (2005). Do not refer to the short version of
-     * the paper, the algorithm described there is wrong!
-     */
-    public void computeOrderlySpanningTreeChiang() {
-        /////////////////////////// REMOVE //////////////////////////////////
-        for (PlanarSubdivision.Vertex v : subdivision.vertices()) {
-            v.name = nodeName(v);
-        }
-        /////////////////////////////////////////////////////////////////////
-        // Initialize data
-        LinkedList<PlanarSubdivision.Vertex> boundary = new LinkedList<>();
-        boundary.add(top);
-        boundary.add(left);
-        boundary.add(right);
+//     /**
+//      * Implementation of the algorithm described in "Orderly Spanning Trees with
+//      * Applications", Chiang et al (2005). Do not refer to the short version of
+//      * the paper, the algorithm described there is wrong!
+//      */
+//     public void computeOrderlySpanningTreeChiang() {
+//         /////////////////////////// REMOVE //////////////////////////////////
+//         for (PlanarSubdivision.Vertex v : subdivision.vertices()) {
+//             v.name = nodeName(v);
+//         }
+//         /////////////////////////////////////////////////////////////////////
+//         // Initialize data
+//         LinkedList<PlanarSubdivision.Vertex> boundary = new LinkedList<>();
+//         boundary.add(top);
+//         boundary.add(left);
+//         boundary.add(right);
 
-        if (DRAW_STEPS) {
-            deletedEdge = new ElementList<>(graph.numberOfEdges(), false);
-            stepCounter = 0;
-            exportState();
-        }
+//         if (DRAW_STEPS) {
+//             deletedEdge = new ElementList<>(graph.numberOfEdges(), false);
+//             stepCounter = 0;
+//             exportState();
+//         }
 
-        // Execute magical function that I don't quite understand
-        block(top, left, boundary);
+//         // Execute magical function that I don't quite understand
+//         block(top, left, boundary);
 
-        // Compute the counterclockwise preordering
-        computeLabelsAndWidth(top);
-//        //debuf only
-//        exportOrderlySpanningTree();
-        if (!ostIsValid()) {
-            throw new RuntimeException("Invalid OST!!!");
-        }
-//        for (int i = 0; i < preordering.numberOfCells(); i++) {
-//            PlanarSubdivision.Vertex v = preordering.getVertex(i);
-//            PlanarSubdivision.Vertex p = parent.getVertex(v);
-//            System.out.println(i + ": " + nodeName(v) + ", parent = " + nodeName(p));
-//        }
-    }
+//         // Compute the counterclockwise preordering
+//         computeLabelsAndWidth(top);
+// //        //debuf only
+// //        exportOrderlySpanningTree();
+//         if (!ostIsValid()) {
+//             throw new RuntimeException("Invalid OST!!!");
+//         }
+// //        for (int i = 0; i < preordering.numberOfCells(); i++) {
+// //            PlanarSubdivision.Vertex v = preordering.getVertex(i);
+// //            PlanarSubdivision.Vertex p = parent.getVertex(v);
+// //            System.out.println(i + ": " + nodeName(v) + ", parent = " + nodeName(p));
+// //        }
+//     }
 
     /**
      * Computes an OST from a Schnyder wood.
@@ -327,20 +326,20 @@ public class GridEmbedder {
 //        }
     }
 
-    private void exportOrderlySpanningTree() {
-        Network tree = new Network(subdivision.numberOfVertices());
-        for (int i = 0; i < subdivision.numberOfVertices(); i++) {
-            tree.getVertex(i).setPosition(new Vector2D(subdivision.getVertex(i).getPosition()));
-            if (i < originalGraph.numberOfVertices()) {
-                tree.getVertex(i).setColor(map.getFace(i).getColor());
-            }
-            PlanarSubdivision.Vertex p = parent.get(i);
-            if (p != null) {
-                tree.addEdge(i, p.getId());
-            }
-        }
-        IpeExporter.exportGraph(tree, "ost.ipe");
-    }
+    // private void exportOrderlySpanningTree() {
+    //     Network tree = new Network(subdivision.numberOfVertices());
+    //     for (int i = 0; i < subdivision.numberOfVertices(); i++) {
+    //         tree.getVertex(i).setPosition(new Vector2D(subdivision.getVertex(i).getPosition()));
+    //         if (i < originalGraph.numberOfVertices()) {
+    //             tree.getVertex(i).setColor(map.getFace(i).getColor());
+    //         }
+    //         PlanarSubdivision.Vertex p = parent.get(i);
+    //         if (p != null) {
+    //             tree.addEdge(i, p.getId());
+    //         }
+    //     }
+    //     IpeExporter.exportGraph(tree, "ost.ipe");
+    // }
 
     private void addOuterFace() {
         Pair<Vector2D, Vector2D> box = boundingBox();
@@ -448,235 +447,235 @@ public class GridEmbedder {
         return new Pair<>(new Vector2D(minX, minY), new Vector2D(maxX, maxY));
     }
 
-    /**
-     * Boundary should be the list of external vertices in counterclockwise
-     * order starting from r.
-     */
-    private void block(PlanarSubdivision.Vertex r, PlanarSubdivision.Vertex v,
-            LinkedList<PlanarSubdivision.Vertex> boundary) {
-        // Find parent of v, next(G, v) and prev(G, v)
-        PlanarSubdivision.Vertex p = r;
-        PlanarSubdivision.Vertex prevV;
-        PlanarSubdivision.Vertex nextV;
-        {
-            CircularListIterator<PlanarSubdivision.Vertex> cit = new CircularListIterator<>(boundary);
-            while (p != v && subdivision.getHalfedge(v, p) == null) {
-                p = cit.previous();
-            }
-            if (p == v) {
-                throw new RuntimeException();
-            }
-            while (cit.previous() != v);
-            prevV = cit.previous();
-            cit.next();
-            cit.next();
-            nextV = cit.next();
-        }
-        parent.set(v, p);
-        deleted.set(v, true);
+    // /**
+    //  * Boundary should be the list of external vertices in counterclockwise
+    //  * order starting from r.
+    //  */
+    // private void block(PlanarSubdivision.Vertex r, PlanarSubdivision.Vertex v,
+    //         LinkedList<PlanarSubdivision.Vertex> boundary) {
+    //     // Find parent of v, next(G, v) and prev(G, v)
+    //     PlanarSubdivision.Vertex p = r;
+    //     PlanarSubdivision.Vertex prevV;
+    //     PlanarSubdivision.Vertex nextV;
+    //     {
+    //         CircularListIterator<PlanarSubdivision.Vertex> cit = new CircularListIterator<>(boundary);
+    //         while (p != v && subdivision.getHalfedge(v, p) == null) {
+    //             p = cit.previous();
+    //         }
+    //         if (p == v) {
+    //             throw new RuntimeException();
+    //         }
+    //         while (cit.previous() != v);
+    //         prevV = cit.previous();
+    //         cit.next();
+    //         cit.next();
+    //         nextV = cit.next();
+    //     }
+    //     parent.set(v, p);
+    //     deleted.set(v, true);
 
-        if (DRAW_STEPS) {
-            Network.Vertex nv = graph.getVertex(v.getId());
-            PlanarSubdivision.Vertex current = nextV;
-            while (current != prevV) {
-                Network.Vertex nu = graph.getVertex(current.getId());
-                Network.Edge e = graph.getEdge(nv, nu);
-                deletedEdge.set(e, true);
-                current = ccw(current, v);
-            }
-            Network.Vertex nu = graph.getVertex(current.getId());
-            Network.Edge e = graph.getEdge(nv, nu);
-            deletedEdge.set(e, true);
-            exportState();
-        }
+    //     if (DRAW_STEPS) {
+    //         Network.Vertex nv = graph.getVertex(v.getId());
+    //         PlanarSubdivision.Vertex current = nextV;
+    //         while (current != prevV) {
+    //             Network.Vertex nu = graph.getVertex(current.getId());
+    //             Network.Edge e = graph.getEdge(nv, nu);
+    //             deletedEdge.set(e, true);
+    //             current = ccw(current, v);
+    //         }
+    //         Network.Vertex nu = graph.getVertex(current.getId());
+    //         Network.Edge e = graph.getEdge(nv, nu);
+    //         deletedEdge.set(e, true);
+    //         exportState();
+    //     }
 
-        // Find the vertices on the same side as prev(G,v) that will be part of
-        // the boundary when v is deleted
-        LinkedList<PlanarSubdivision.Vertex> leftBoundary = new LinkedList<>();
-        ElementList<Integer> leftCount = new ElementList<>(subdivision.numberOfVertices(), 0);
-        {
-            if (p != prevV) {
-                PlanarSubdivision.Vertex current = cw(v, p, deleted);
-                PlanarSubdivision.Vertex previous = p;
-                while (current != prevV) {
-                    leftBoundary.addFirst(current);
-                    leftCount.set(current, leftCount.get(current) + 1);
-                    PlanarSubdivision.Vertex temp = current;
-                    current = cw(previous, current, deleted);
-                    previous = temp;
-                }
-            }
-        }
-        // Find the vertices on the same side as next(G,v) that will be part of
-        // the boundary when v is deleted
-        LinkedList<PlanarSubdivision.Vertex> rightBoundary = new LinkedList<>();
-        ElementList<Integer> rightCount = new ElementList<>(subdivision.numberOfVertices(), 0);
-        {
-            if (p != nextV) {
-                PlanarSubdivision.Vertex current = ccw(v, p, deleted);
-                PlanarSubdivision.Vertex previous = p;
-                while (current != nextV) {
-                    rightBoundary.add(current);
-                    rightCount.set(current, rightCount.get(current) + 1);
-                    PlanarSubdivision.Vertex temp = current;
-                    current = ccw(previous, current, deleted);
-                    previous = temp;
-                }
-            }
-        }
-        // Add the remaining vertices to the left and right boundaries
-        {
-            CircularListIterator<PlanarSubdivision.Vertex> boundaryIterator = new CircularListIterator<>(boundary);
-            ListIterator<PlanarSubdivision.Vertex> leftBoundaryIterator = leftBoundary.listIterator();
-            PlanarSubdivision.Vertex current = boundaryIterator.next();
-            do {
-                leftBoundaryIterator.add(current);
-                leftCount.set(current, leftCount.get(current) + 1);
-                current = boundaryIterator.next();
-            } while (current != v);
+    //     // Find the vertices on the same side as prev(G,v) that will be part of
+    //     // the boundary when v is deleted
+    //     LinkedList<PlanarSubdivision.Vertex> leftBoundary = new LinkedList<>();
+    //     ElementList<Integer> leftCount = new ElementList<>(subdivision.numberOfVertices(), 0);
+    //     {
+    //         if (p != prevV) {
+    //             PlanarSubdivision.Vertex current = cw(v, p, deleted);
+    //             PlanarSubdivision.Vertex previous = p;
+    //             while (current != prevV) {
+    //                 leftBoundary.addFirst(current);
+    //                 leftCount.set(current, leftCount.get(current) + 1);
+    //                 PlanarSubdivision.Vertex temp = current;
+    //                 current = cw(previous, current, deleted);
+    //                 previous = temp;
+    //             }
+    //         }
+    //     }
+    //     // Find the vertices on the same side as next(G,v) that will be part of
+    //     // the boundary when v is deleted
+    //     LinkedList<PlanarSubdivision.Vertex> rightBoundary = new LinkedList<>();
+    //     ElementList<Integer> rightCount = new ElementList<>(subdivision.numberOfVertices(), 0);
+    //     {
+    //         if (p != nextV) {
+    //             PlanarSubdivision.Vertex current = ccw(v, p, deleted);
+    //             PlanarSubdivision.Vertex previous = p;
+    //             while (current != nextV) {
+    //                 rightBoundary.add(current);
+    //                 rightCount.set(current, rightCount.get(current) + 1);
+    //                 PlanarSubdivision.Vertex temp = current;
+    //                 current = ccw(previous, current, deleted);
+    //                 previous = temp;
+    //             }
+    //         }
+    //     }
+    //     // Add the remaining vertices to the left and right boundaries
+    //     {
+    //         CircularListIterator<PlanarSubdivision.Vertex> boundaryIterator = new CircularListIterator<>(boundary);
+    //         ListIterator<PlanarSubdivision.Vertex> leftBoundaryIterator = leftBoundary.listIterator();
+    //         PlanarSubdivision.Vertex current = boundaryIterator.next();
+    //         do {
+    //             leftBoundaryIterator.add(current);
+    //             leftCount.set(current, leftCount.get(current) + 1);
+    //             current = boundaryIterator.next();
+    //         } while (current != v);
 
-            current = boundaryIterator.next();
-            while (current != p) {
-                rightBoundary.add(current);
-                rightCount.set(current, rightCount.get(current) + 1);
-                current = boundaryIterator.next();
-            }
-            rightBoundary.addFirst(p);
-            rightCount.set(p, rightCount.get(p) + 1);
+    //         current = boundaryIterator.next();
+    //         while (current != p) {
+    //             rightBoundary.add(current);
+    //             rightCount.set(current, rightCount.get(current) + 1);
+    //             current = boundaryIterator.next();
+    //         }
+    //         rightBoundary.addFirst(p);
+    //         rightCount.set(p, rightCount.get(p) + 1);
 
-            while (current != r) {
-                leftBoundary.add(current);
-                leftCount.set(current, leftCount.get(current) + 1);
-                current = boundaryIterator.next();
-            }
-        }
-        // Arrays to quickly tell if a vertex is in ccw(G, r, v) or cw(G, r, v)
-        ElementList<Boolean> inCCW = new ElementList<>(subdivision.numberOfVertices(), false);
-        ElementList<Boolean> inCW = new ElementList<>(subdivision.numberOfVertices(), false);
-        {
-            CircularListIterator<PlanarSubdivision.Vertex> cit = new CircularListIterator<>(boundary);
-            PlanarSubdivision.Vertex current;
-            do {
-                current = cit.next();
-                inCCW.set(current, true);
-            } while (current != v);
+    //         while (current != r) {
+    //             leftBoundary.add(current);
+    //             leftCount.set(current, leftCount.get(current) + 1);
+    //             current = boundaryIterator.next();
+    //         }
+    //     }
+    //     // Arrays to quickly tell if a vertex is in ccw(G, r, v) or cw(G, r, v)
+    //     ElementList<Boolean> inCCW = new ElementList<>(subdivision.numberOfVertices(), false);
+    //     ElementList<Boolean> inCW = new ElementList<>(subdivision.numberOfVertices(), false);
+    //     {
+    //         CircularListIterator<PlanarSubdivision.Vertex> cit = new CircularListIterator<>(boundary);
+    //         PlanarSubdivision.Vertex current;
+    //         do {
+    //             current = cit.next();
+    //             inCCW.set(current, true);
+    //         } while (current != v);
 
-            inCW.set(v, true);
-            do {
-                current = cit.next();
-                inCW.set(current, true);
-            } while (current != r);
-        }
-        // Create and recursively solve the 2-connected components
-        if (leftBoundary.size() > 1) {
-            ArrayList<LinkedList<PlanarSubdivision.Vertex>> components;
-            components = computeBiconnectedComponents(leftBoundary, leftCount);
-            for (LinkedList<PlanarSubdivision.Vertex> component : components) {
-                CircularListIterator<PlanarSubdivision.Vertex> cit = new CircularListIterator<>(component);
-                PlanarSubdivision.Vertex rc = cit.next();
-                PlanarSubdivision.Vertex nextRc = cit.next();
-                PlanarSubdivision.Vertex vc = null;
-                PlanarSubdivision.Vertex current;
-                cit = new CircularListIterator<>(component);
-                do {
-                    current = cit.previous();
-                    if (inCCW.get(current)) {
-                        vc = current;
-                        break;
-                    }
-                } while (current != nextRc);
-                if (vc == null) {
-                    vc = nextRc;
-                }
-                block(rc, vc, component);
-            }
-        }
-        if (rightBoundary.size() > 1) {
-            ArrayList<LinkedList<PlanarSubdivision.Vertex>> components;
-            components = computeBiconnectedComponents(rightBoundary, rightCount);
-            for (LinkedList<PlanarSubdivision.Vertex> component : components) {
-                CircularListIterator<PlanarSubdivision.Vertex> cit = new CircularListIterator<>(component);
-                cit.previous();
-                PlanarSubdivision.Vertex prevRc = cit.next();
-                PlanarSubdivision.Vertex rc = cit.next();
-                PlanarSubdivision.Vertex vc = null;
-                PlanarSubdivision.Vertex current;
-                do {
-                    current = cit.next();
-                    if (inCW.get(current)) {
-                        vc = current;
-                        break;
-                    }
-                } while (current != prevRc);
-                if (vc == null) {
-                    vc = prevRc;
-                }
-                block(rc, vc, component);
-            }
-        }
-    }
+    //         inCW.set(v, true);
+    //         do {
+    //             current = cit.next();
+    //             inCW.set(current, true);
+    //         } while (current != r);
+    //     }
+    //     // Create and recursively solve the 2-connected components
+    //     if (leftBoundary.size() > 1) {
+    //         ArrayList<LinkedList<PlanarSubdivision.Vertex>> components;
+    //         components = computeBiconnectedComponents(leftBoundary, leftCount);
+    //         for (LinkedList<PlanarSubdivision.Vertex> component : components) {
+    //             CircularListIterator<PlanarSubdivision.Vertex> cit = new CircularListIterator<>(component);
+    //             PlanarSubdivision.Vertex rc = cit.next();
+    //             PlanarSubdivision.Vertex nextRc = cit.next();
+    //             PlanarSubdivision.Vertex vc = null;
+    //             PlanarSubdivision.Vertex current;
+    //             cit = new CircularListIterator<>(component);
+    //             do {
+    //                 current = cit.previous();
+    //                 if (inCCW.get(current)) {
+    //                     vc = current;
+    //                     break;
+    //                 }
+    //             } while (current != nextRc);
+    //             if (vc == null) {
+    //                 vc = nextRc;
+    //             }
+    //             block(rc, vc, component);
+    //         }
+    //     }
+    //     if (rightBoundary.size() > 1) {
+    //         ArrayList<LinkedList<PlanarSubdivision.Vertex>> components;
+    //         components = computeBiconnectedComponents(rightBoundary, rightCount);
+    //         for (LinkedList<PlanarSubdivision.Vertex> component : components) {
+    //             CircularListIterator<PlanarSubdivision.Vertex> cit = new CircularListIterator<>(component);
+    //             cit.previous();
+    //             PlanarSubdivision.Vertex prevRc = cit.next();
+    //             PlanarSubdivision.Vertex rc = cit.next();
+    //             PlanarSubdivision.Vertex vc = null;
+    //             PlanarSubdivision.Vertex current;
+    //             do {
+    //                 current = cit.next();
+    //                 if (inCW.get(current)) {
+    //                     vc = current;
+    //                     break;
+    //                 }
+    //             } while (current != prevRc);
+    //             if (vc == null) {
+    //                 vc = prevRc;
+    //             }
+    //             block(rc, vc, component);
+    //         }
+    //     }
+    // }
 
-    private ArrayList<LinkedList<PlanarSubdivision.Vertex>> computeBiconnectedComponents(
-            LinkedList<PlanarSubdivision.Vertex> boundary, ElementList<Integer> count) {
+    // private ArrayList<LinkedList<PlanarSubdivision.Vertex>> computeBiconnectedComponents(
+    //         LinkedList<PlanarSubdivision.Vertex> boundary, ElementList<Integer> count) {
 
-        ArrayList<LinkedList<PlanarSubdivision.Vertex>> components = new ArrayList<>();
-        ArrayDeque<LinkedList<PlanarSubdivision.Vertex>> componentStack = new ArrayDeque<>();
-        LinkedList<PlanarSubdivision.Vertex> activeBoundary = new LinkedList<>();
-        componentStack.push(activeBoundary);
-        components.add(activeBoundary);
-        CircularListIterator<PlanarSubdivision.Vertex> cit = new CircularListIterator<>(boundary);
-        PlanarSubdivision.Vertex current;
-        do {
-            current = cit.next();
-            if (current == activeBoundary.peekFirst()) {
-                // This component is finished
-                componentStack.pop();
-                int currentCount = count.get(current);
-                if (currentCount >= 2) {
-                    // New component connected to the same cut vertex
-                    count.set(current, currentCount - 1);
-                    activeBoundary = new LinkedList<>();
-                    activeBoundary.add(current);
-                    componentStack.push(activeBoundary);
-                    components.add(activeBoundary);
-                } else {
-                    activeBoundary = componentStack.peek();
-                }
-            } else {
-                activeBoundary.add(current);
-                int currentCount = count.get(current);
-                if (currentCount >= 2) {
-                    // Found a cut vertex
-                    count.set(current, currentCount - 1);
-                    activeBoundary = new LinkedList<>();
-                    activeBoundary.add(current);
-                    componentStack.push(activeBoundary);
-                    components.add(activeBoundary);
-                }
-            }
-        } while (!componentStack.isEmpty());
-        return components;
-    }
+    //     ArrayList<LinkedList<PlanarSubdivision.Vertex>> components = new ArrayList<>();
+    //     ArrayDeque<LinkedList<PlanarSubdivision.Vertex>> componentStack = new ArrayDeque<>();
+    //     LinkedList<PlanarSubdivision.Vertex> activeBoundary = new LinkedList<>();
+    //     componentStack.push(activeBoundary);
+    //     components.add(activeBoundary);
+    //     CircularListIterator<PlanarSubdivision.Vertex> cit = new CircularListIterator<>(boundary);
+    //     PlanarSubdivision.Vertex current;
+    //     do {
+    //         current = cit.next();
+    //         if (current == activeBoundary.peekFirst()) {
+    //             // This component is finished
+    //             componentStack.pop();
+    //             int currentCount = count.get(current);
+    //             if (currentCount >= 2) {
+    //                 // New component connected to the same cut vertex
+    //                 count.set(current, currentCount - 1);
+    //                 activeBoundary = new LinkedList<>();
+    //                 activeBoundary.add(current);
+    //                 componentStack.push(activeBoundary);
+    //                 components.add(activeBoundary);
+    //             } else {
+    //                 activeBoundary = componentStack.peek();
+    //             }
+    //         } else {
+    //             activeBoundary.add(current);
+    //             int currentCount = count.get(current);
+    //             if (currentCount >= 2) {
+    //                 // Found a cut vertex
+    //                 count.set(current, currentCount - 1);
+    //                 activeBoundary = new LinkedList<>();
+    //                 activeBoundary.add(current);
+    //                 componentStack.push(activeBoundary);
+    //                 components.add(activeBoundary);
+    //             }
+    //         }
+    //     } while (!componentStack.isEmpty());
+    //     return components;
+    // }
 
-    private PlanarSubdivision.Vertex cw(PlanarSubdivision.Vertex u, PlanarSubdivision.Vertex v,
-            ElementList<Boolean> deleted) {
-        List<? extends PlanarSubdivision.Halfedge> halfedges = v.getOutgoingHalfedges();
-        int size = halfedges.size();
-        for (int i = 0; i < size; i++) {
-            PlanarSubdivision.Halfedge h = halfedges.get(i);
-            if (h.getTarget() == u) {
-                int j = (i + 1) % size;
-                PlanarSubdivision.Halfedge next = halfedges.get(j);
-                while (deleted.get(next.getTarget())) {
-                    j = (j + 1) % size;
-                    next = halfedges.get(j);
-                }
-                return next.getTarget();
-            }
-        }
-        throw new RuntimeException();
-        //return null;
-    }
+    // private PlanarSubdivision.Vertex cw(PlanarSubdivision.Vertex u, PlanarSubdivision.Vertex v,
+    //         ElementList<Boolean> deleted) {
+    //     List<? extends PlanarSubdivision.Halfedge> halfedges = v.getOutgoingHalfedges();
+    //     int size = halfedges.size();
+    //     for (int i = 0; i < size; i++) {
+    //         PlanarSubdivision.Halfedge h = halfedges.get(i);
+    //         if (h.getTarget() == u) {
+    //             int j = (i + 1) % size;
+    //             PlanarSubdivision.Halfedge next = halfedges.get(j);
+    //             while (deleted.get(next.getTarget())) {
+    //                 j = (j + 1) % size;
+    //                 next = halfedges.get(j);
+    //             }
+    //             return next.getTarget();
+    //         }
+    //     }
+    //     throw new RuntimeException();
+    //     //return null;
+    // }
 
     private PlanarSubdivision.Vertex cw(PlanarSubdivision.Vertex u, PlanarSubdivision.Vertex v) {
         List<? extends PlanarSubdivision.Halfedge> halfedges = v.getOutgoingHalfedges();
@@ -691,25 +690,25 @@ public class GridEmbedder {
         //return null;
     }
 
-    private PlanarSubdivision.Vertex ccw(PlanarSubdivision.Vertex u, PlanarSubdivision.Vertex v,
-            ElementList<Boolean> deleted) {
-        List<? extends PlanarSubdivision.Halfedge> halfedges = v.getOutgoingHalfedges();
-        int size = halfedges.size();
-        for (int i = 0; i < size; i++) {
-            PlanarSubdivision.Halfedge h = halfedges.get(i);
-            if (h.getTarget() == u) {
-                int j = (i + size - 1) % size;
-                PlanarSubdivision.Halfedge next = halfedges.get(j);
-                while (deleted.get(next.getTarget())) {
-                    j = (j + size - 1) % size;
-                    next = halfedges.get(j);
-                }
-                return next.getTarget();
-            }
-        }
-        throw new RuntimeException();
-        //return null;
-    }
+    // private PlanarSubdivision.Vertex ccw(PlanarSubdivision.Vertex u, PlanarSubdivision.Vertex v,
+    //         ElementList<Boolean> deleted) {
+    //     List<? extends PlanarSubdivision.Halfedge> halfedges = v.getOutgoingHalfedges();
+    //     int size = halfedges.size();
+    //     for (int i = 0; i < size; i++) {
+    //         PlanarSubdivision.Halfedge h = halfedges.get(i);
+    //         if (h.getTarget() == u) {
+    //             int j = (i + size - 1) % size;
+    //             PlanarSubdivision.Halfedge next = halfedges.get(j);
+    //             while (deleted.get(next.getTarget())) {
+    //                 j = (j + size - 1) % size;
+    //                 next = halfedges.get(j);
+    //             }
+    //             return next.getTarget();
+    //         }
+    //     }
+    //     throw new RuntimeException();
+    //     //return null;
+    // }
 
     private PlanarSubdivision.Vertex ccw(PlanarSubdivision.Vertex u, PlanarSubdivision.Vertex v) {
         List<? extends PlanarSubdivision.Halfedge> halfedges = v.getOutgoingHalfedges();
@@ -836,28 +835,27 @@ public class GridEmbedder {
         new HeightRecurrence().compute();
     }
 
-    private void exportState() {
-        IpeExporter exporter = new IpeExporter();
-        exporter.setStrokeWidth(3.0);
-        for (Network.Edge e : graph.edges()) {
-            PlanarSubdivision.Vertex u = subdivision.getVertex(e.getSource().getId());
-            PlanarSubdivision.Vertex v = subdivision.getVertex(e.getTarget().getId());
-            if (parent.get(u) == v || parent.get(v) == u) {
-                exporter.setStrokeColor(Color.RED);
-                exporter.appendEdge(e, null);
-            } else if (!deletedEdge.get(e)) {
-                exporter.setStrokeColor(Color.BLACK);
-                exporter.appendEdge(e, null);
-            }
-        }
-        exporter.setFillColor(Color.WHITE);
-        exporter.setStrokeColor(Color.BLACK);
-        for (Network.Vertex v : graph.vertices()) {
-            exporter.appendVertex(v, null);
-        }
-        exporter.exportToFile(String.format("ost-states/ost-state-%03d.ipe", stepCounter++));
-
-    }
+    // private void exportState() {
+    //     IpeExporter exporter = new IpeExporter();
+    //     exporter.setStrokeWidth(3.0);
+    //     for (Network.Edge e : graph.edges()) {
+    //         PlanarSubdivision.Vertex u = subdivision.getVertex(e.getSource().getId());
+    //         PlanarSubdivision.Vertex v = subdivision.getVertex(e.getTarget().getId());
+    //         if (parent.get(u) == v || parent.get(v) == u) {
+    //             exporter.setStrokeColor(Color.RED);
+    //             exporter.appendEdge(e, null);
+    //         } else if (!deletedEdge.get(e)) {
+    //             exporter.setStrokeColor(Color.BLACK);
+    //             exporter.appendEdge(e, null);
+    //         }
+    //     }
+    //     exporter.setFillColor(Color.WHITE);
+    //     exporter.setStrokeColor(Color.BLACK);
+    //     for (Network.Vertex v : graph.vertices()) {
+    //         exporter.appendVertex(v, null);
+    //     }
+    //     exporter.exportToFile(String.format("ost-states/ost-state-%03d.ipe", stepCounter++));
+    // }
 
     private class HeightRecurrence {
 
@@ -933,25 +931,25 @@ public class GridEmbedder {
         }
     }
 
-    private String nodeName(PlanarSubdivision.Vertex v) {
-        if (v == null) {
-            return "#NULL#";
-        } else if (v.getId() < map.numberOfBoundedFaces()) {
-            try {
-                return map.getFace(v.getId()).getLabel().getText();
-            } catch (NullPointerException e) {
-                return null;
-            }
-        } else if (v == top) {
-            return "TOP";
-        } else if (v == left) {
-            return "LEFT";
-        } else if (v == right) {
-            return "RIGHT";
-        } else {
-            return v.getPosition().toString();
-        }
-    }
+    // private String nodeName(PlanarSubdivision.Vertex v) {
+    //     if (v == null) {
+    //         return "#NULL#";
+    //     } else if (v.getId() < map.numberOfBoundedFaces()) {
+    //         try {
+    //             return map.getFace(v.getId()).getLabel().getText();
+    //         } catch (NullPointerException e) {
+    //             return null;
+    //         }
+    //     } else if (v == top) {
+    //         return "TOP";
+    //     } else if (v == left) {
+    //         return "LEFT";
+    //     } else if (v == right) {
+    //         return "RIGHT";
+    //     } else {
+    //         return v.getPosition().toString();
+    //     }
+    // }
 
     private boolean ostIsValid() {
         TreeChecker tc = new TreeChecker();

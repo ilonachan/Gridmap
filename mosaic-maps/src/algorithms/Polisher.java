@@ -7,12 +7,12 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import algorithms.Moves.ReleaseMove;
 import algorithms.Moves.TakeMove;
-import java.awt.Color;
+// import java.awt.Color;
 import java.awt.geom.Point2D;
-import java.io.File;
-import java.io.FileWriter;
+// import java.io.File;
+// import java.io.FileWriter;
 import model.Cartogram.MosaicCartogram;
-import model.Cartogram.MosaicCartogram.MosaicRegion;
+// import model.Cartogram.MosaicCartogram.MosaicRegion;
 import model.Network;
 import model.graph.FlowDigraph;
 import model.graph.SuccessiveShortestPathMininumCostFlow;
@@ -511,122 +511,122 @@ public final class Polisher {
         }
     }
 
-    /**
-     * prints a map showing the arcs between regions for debugging purposes.
-     *
-     * @param pathString
-     * @param currentGrid
-     */
-    private void printCurrent(StringBuilder pathString, MosaicCartogram currentGrid) {
-        String outputString = "";
-        String preamble = "<?xml version=\"1.0\"?>\n"
-                          + "<!DOCTYPE ipe SYSTEM \"ipe.dtd\">\n"
-                          + "<ipe version=\"70005\" creator=\"Java IpeLib\">\n"
-                          + "<ipestyle name=\"basic\">\n"
-                          + "<pen name=\"heavier\" value=\"0.80\"/>\n"
-                          + "<pen name=\"fat\" value=\"1.20\"/>\n"
-                          + "<pen name=\"ultrafat\" value=\"2.00\"/>\n"
-                          + "<color name=\"red\" value=\"1.000 0.000 0.000\"/>\n"
-                          + "<color name=\"green\" value=\"0.000 1.000 0.000\"/>\n"
-                          + "<color name=\"blue\" value=\"0.000 0.000 1.000\"/>\n"
-                          + "<color name=\"yellow\" value=\"1.000 1.000 0.000\"/>\n"
-                          + "<color name=\"orange\" value=\"1.000 0.647 0.000\"/>\n"
-                          + "<color name=\"gold\" value=\"1.000 0.843 0.000\"/>\n"
-                          + "<color name=\"purple\" value=\"0.627 0.125 0.941\"/>\n"
-                          + "<color name=\"gray\" value=\"0.745\"/>\n"
-                          + "<color name=\"brown\" value=\"0.647 0.165 0.165\"/>\n"
-                          + "<color name=\"navy\" value=\"0.000 0.000 0.502\"/>\n"
-                          + "<color name=\"pink\" value=\"1.000 0.753 0.796\"/>\n"
-                          + "<color name=\"seagreen\" value=\"0.180 0.545 0.341\"/>\n"
-                          + "<color name=\"turquoise\" value=\"0.251 0.878 0.816\"/>\n"
-                          + "<color name=\"violet\" value=\"0.933 0.510 0.933\"/>\n"
-                          + "<color name=\"darkblue\" value=\"0.000 0.000 0.545\"/>\n"
-                          + "<color name=\"darkcyan\" value=\"0.000 0.545 0.545\"/>\n"
-                          + "<color name=\"darkgray\" value=\"0.663\"/>\n"
-                          + "<color name=\"darkgreen\" value=\"0.000 0.392 0.000\"/>\n"
-                          + "<color name=\"darkmagenta\" value=\"0.545 0.000 0.545\"/>\n"
-                          + "<color name=\"darkorange\" value=\"1.000 0.549 0.000\"/>\n"
-                          + "<color name=\"darkred\" value=\"0.545 0.000 0.000\"/>\n"
-                          + "<color name=\"lightblue\" value=\"0.678 0.847 0.902\"/>\n"
-                          + "<color name=\"lightcyan\" value=\"0.878 1.000 1.000\"/>\n"
-                          + "<color name=\"lightgray\" value=\"0.827\"/>\n"
-                          + "<color name=\"lightgreen\" value=\"0.565 0.933 0.565\"/>\n"
-                          + "<color name=\"lightyellow\" value=\"1.000 1.000 0.878\"/>\n"
-                          + "</ipestyle>\n"
-                          + "<page>\n"
-                          + "<layer name=\"cells\"/>\n"
-                          + "<group layer=\"cells\">\n";
+    // /**
+    //  * prints a map showing the arcs between regions for debugging purposes.
+    //  *
+    //  * @param pathString
+    //  * @param currentGrid
+    //  */
+    // private void printCurrent(StringBuilder pathString, MosaicCartogram currentGrid) {
+    //     String outputString = "";
+    //     String preamble = "<?xml version=\"1.0\"?>\n"
+    //                       + "<!DOCTYPE ipe SYSTEM \"ipe.dtd\">\n"
+    //                       + "<ipe version=\"70005\" creator=\"Java IpeLib\">\n"
+    //                       + "<ipestyle name=\"basic\">\n"
+    //                       + "<pen name=\"heavier\" value=\"0.80\"/>\n"
+    //                       + "<pen name=\"fat\" value=\"1.20\"/>\n"
+    //                       + "<pen name=\"ultrafat\" value=\"2.00\"/>\n"
+    //                       + "<color name=\"red\" value=\"1.000 0.000 0.000\"/>\n"
+    //                       + "<color name=\"green\" value=\"0.000 1.000 0.000\"/>\n"
+    //                       + "<color name=\"blue\" value=\"0.000 0.000 1.000\"/>\n"
+    //                       + "<color name=\"yellow\" value=\"1.000 1.000 0.000\"/>\n"
+    //                       + "<color name=\"orange\" value=\"1.000 0.647 0.000\"/>\n"
+    //                       + "<color name=\"gold\" value=\"1.000 0.843 0.000\"/>\n"
+    //                       + "<color name=\"purple\" value=\"0.627 0.125 0.941\"/>\n"
+    //                       + "<color name=\"gray\" value=\"0.745\"/>\n"
+    //                       + "<color name=\"brown\" value=\"0.647 0.165 0.165\"/>\n"
+    //                       + "<color name=\"navy\" value=\"0.000 0.000 0.502\"/>\n"
+    //                       + "<color name=\"pink\" value=\"1.000 0.753 0.796\"/>\n"
+    //                       + "<color name=\"seagreen\" value=\"0.180 0.545 0.341\"/>\n"
+    //                       + "<color name=\"turquoise\" value=\"0.251 0.878 0.816\"/>\n"
+    //                       + "<color name=\"violet\" value=\"0.933 0.510 0.933\"/>\n"
+    //                       + "<color name=\"darkblue\" value=\"0.000 0.000 0.545\"/>\n"
+    //                       + "<color name=\"darkcyan\" value=\"0.000 0.545 0.545\"/>\n"
+    //                       + "<color name=\"darkgray\" value=\"0.663\"/>\n"
+    //                       + "<color name=\"darkgreen\" value=\"0.000 0.392 0.000\"/>\n"
+    //                       + "<color name=\"darkmagenta\" value=\"0.545 0.000 0.545\"/>\n"
+    //                       + "<color name=\"darkorange\" value=\"1.000 0.549 0.000\"/>\n"
+    //                       + "<color name=\"darkred\" value=\"0.545 0.000 0.000\"/>\n"
+    //                       + "<color name=\"lightblue\" value=\"0.678 0.847 0.902\"/>\n"
+    //                       + "<color name=\"lightcyan\" value=\"0.878 1.000 1.000\"/>\n"
+    //                       + "<color name=\"lightgray\" value=\"0.827\"/>\n"
+    //                       + "<color name=\"lightgreen\" value=\"0.565 0.933 0.565\"/>\n"
+    //                       + "<color name=\"lightyellow\" value=\"1.000 1.000 0.878\"/>\n"
+    //                       + "</ipestyle>\n"
+    //                       + "<page>\n"
+    //                       + "<layer name=\"cells\"/>\n"
+    //                       + "<group layer=\"cells\">\n";
 
-        String cells = "";
+    //     String cells = "";
 
-        for (MosaicRegion r : currentGrid.regions()) {
-            Color color = r.getVertex().getColor();
-            for (MosaicCartogram.Coordinate c : r) {
-                String cell = getSquare(c, color);
-                cells += cell + "\n";
-            }
-        }
+    //     for (MosaicRegion r : currentGrid.regions()) {
+    //         Color color = r.getVertex().getColor();
+    //         for (MosaicCartogram.Coordinate c : r) {
+    //             String cell = getSquare(c, color);
+    //             cells += cell + "\n";
+    //         }
+    //     }
 
-        outputString += preamble;
-        outputString += cells;
-        outputString += "</group>\n";
-        outputString += pathString.toString();
+    //     outputString += preamble;
+    //     outputString += cells;
+    //     outputString += "</group>\n";
+    //     outputString += pathString.toString();
 
-        for (MosaicRegion r : currentGrid.regions()) {
-            int hexError = r.getHexError();
-            MosaicCartogram.Coordinate barycenter = r.barycenter();
-            Point2D p = barycenter.toPoint2D();
-            if (hexError != 0) {
-                System.out.println("hexError for R = " + hexError);
+    //     for (MosaicRegion r : currentGrid.regions()) {
+    //         int hexError = r.getHexError();
+    //         MosaicCartogram.Coordinate barycenter = r.barycenter();
+    //         Point2D p = barycenter.toPoint2D();
+    //         if (hexError != 0) {
+    //             System.out.println("hexError for R = " + hexError);
 
-                outputString += "<text transformations=\"translations\" "
-                                + "pos=\"" + p.getX() + " " + p.getY() + "\" "
-                                + "stroke=\"black\" type=\"label\" width=\"4.981\" height=\"6.42\" depth=\"0\" valign=\"baseline\">"
-                                + hexError
-                                + "</text>";
-            }
-        }
+    //             outputString += "<text transformations=\"translations\" "
+    //                             + "pos=\"" + p.getX() + " " + p.getY() + "\" "
+    //                             + "stroke=\"black\" type=\"label\" width=\"4.981\" height=\"6.42\" depth=\"0\" valign=\"baseline\">"
+    //                             + hexError
+    //                             + "</text>";
+    //         }
+    //     }
 
-        outputString += "</page>\n"
-                        + "</ipe>";
+    //     outputString += "</page>\n"
+    //                     + "</ipe>";
 
-        try {
-            FileWriter fw = new FileWriter(new File("../Data/output/debug" + printCount + ".ipe"));
-            fw.append(outputString);
-            fw.flush();
-            fw.close();
-        } catch (Exception e) {
+    //     try {
+    //         FileWriter fw = new FileWriter(new File("../Data/output/debug" + printCount + ".ipe"));
+    //         fw.append(outputString);
+    //         fw.flush();
+    //         fw.close();
+    //     } catch (Exception e) {
 
-        }
-        printCount++;
+    //     }
+    //     printCount++;
 
-    }
+    // }
 
-    /**
-     * Returns a ipe-string for a square at coordinate c with color {@code}
-     * color.
-     *
-     * @param c
-     * @param color
-     * @return
-     */
-    private String getSquare(MosaicCartogram.Coordinate c, Color color) {
-        Point2D cP = c.toPoint2D();
-        double midX = cP.getX();
-        double midY = cP.getY();
+    // /**
+    //  * Returns a ipe-string for a square at coordinate c with color {@code}
+    //  * color.
+    //  *
+    //  * @param c
+    //  * @param color
+    //  * @return
+    //  */
+    // private String getSquare(MosaicCartogram.Coordinate c, Color color) {
+    //     Point2D cP = c.toPoint2D();
+    //     double midX = cP.getX();
+    //     double midY = cP.getY();
 
-        double r = ((double) color.getRed()) / 255.0;
-        double g = ((double) color.getGreen()) / 255.0;
-        double b = ((double) color.getBlue()) / 255.0;
+    //     double r = ((double) color.getRed()) / 255.0;
+    //     double g = ((double) color.getGreen()) / 255.0;
+    //     double b = ((double) color.getBlue()) / 255.0;
 
-        String square = "<path fill=\"" + r + " " + g + " " + b + "\">\n"
-                        + (midX - 0.5) + " " + (midY - 0.5) + " m\n"
-                        + (midX + 0.5) + " " + (midY - 0.5) + " l\n"
-                        + (midX + 0.5) + " " + (midY + 0.5) + " l\n"
-                        + (midX - 0.5) + " " + (midY + 0.5) + " l\n"
-                        + "h\n"
-                        + "</path>";
-        return square;
-    }
+    //     String square = "<path fill=\"" + r + " " + g + " " + b + "\">\n"
+    //                     + (midX - 0.5) + " " + (midY - 0.5) + " m\n"
+    //                     + (midX + 0.5) + " " + (midY - 0.5) + " l\n"
+    //                     + (midX + 0.5) + " " + (midY + 0.5) + " l\n"
+    //                     + (midX - 0.5) + " " + (midY + 0.5) + " l\n"
+    //                     + "h\n"
+    //                     + "</path>";
+    //     return square;
+    // }
 
 }

@@ -3,14 +3,11 @@ package algorithms;
 import algorithms.Moves.SlideMove;
 import algorithms.Moves.TakeMove;
 import algorithms.Moves.ReleaseMove;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import gui.panels.MosaicPanel;
 import model.Cartogram.MosaicCartogram;
 import model.Cartogram.MosaicCartogram.MosaicRegion;
@@ -35,7 +32,7 @@ public class MosaicHeuristic {
     private final MosaicCartogram originalGrid;
     private final ArrayList<Separator> separators;
     public MosaicCartogram currentGrid = null;
-    private MosaicPanel panel = null;
+    // private MosaicPanel panel = null;
     private ForceDirectedLayout forceDirectedLayout = null;
 
     public MosaicHeuristic(Map map, Network weakDual, MosaicCartogram originalGrid) {
@@ -55,7 +52,7 @@ public class MosaicHeuristic {
     }
 
     public MosaicCartogram execute(MosaicPanel panel, final int maxNoImproveIterations, final boolean finalize, final boolean exactTiles) {
-        this.panel = panel;
+        // this.panel = panel;
         currentGrid = originalGrid.duplicate();
 
         initializeGuidingShapesPositions(currentGrid);
@@ -117,7 +114,7 @@ public class MosaicHeuristic {
     }
 
     public MosaicCartogram finalize(MosaicPanel panel, boolean exactTiles) {
-        this.panel = panel;
+        // this.panel = panel;
         currentGrid = originalGrid.duplicate();
         if (!gridIsValid()) {
             System.out.println("Bad bad grid!");

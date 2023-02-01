@@ -41,28 +41,28 @@ public class GraphAlgorithms {
         return visitor.isConnected;
     }
 
-    /**
-     * Acyclicity test using DFS. Stops immediately if a cycle is found.
-     */
-    public static <V extends AbstractVertex, E extends AbstractEdge> boolean isAcyclic(GenericGraph<V, E> g) {
-        class LocalVisitor extends DepthFirstSearchTraverser.Visitor<V, E> {
+    // /**
+    //  * Acyclicity test using DFS. Stops immediately if a cycle is found.
+    //  */
+    // public static <V extends AbstractVertex, E extends AbstractEdge> boolean isAcyclic(GenericGraph<V, E> g) {
+    //     class LocalVisitor extends DepthFirstSearchTraverser.Visitor<V, E> {
 
-            boolean isAcyclic = true;
+    //         boolean isAcyclic = true;
 
-            @Override
-            public void preExploreEdge(DepthFirstSearchTraverser<V, E> traverser, E e) {
-                if (traverser.getEdgeType(e) == DepthFirstSearchTraverser.EdgeType.BACK) {
-                    isAcyclic = false;
-                    traverser.stop();
-                }
-            }
-        }
+    //         @Override
+    //         public void preExploreEdge(DepthFirstSearchTraverser<V, E> traverser, E e) {
+    //             if (traverser.getEdgeType(e) == DepthFirstSearchTraverser.EdgeType.BACK) {
+    //                 isAcyclic = false;
+    //                 traverser.stop();
+    //             }
+    //         }
+    //     }
 
-        LocalVisitor visitor = new LocalVisitor();
-        DepthFirstSearchTraverser<V, E> traverser = new DepthFirstSearchTraverser<>(g, visitor);
-        traverser.traverse();
-        return visitor.isAcyclic;
-    }
+    //     LocalVisitor visitor = new LocalVisitor();
+    //     DepthFirstSearchTraverser<V, E> traverser = new DepthFirstSearchTraverser<>(g, visitor);
+    //     traverser.traverse();
+    //     return visitor.isAcyclic;
+    // }
 
     /**
      * Returns the cut edges of the specified graph. Horrible quadratic time

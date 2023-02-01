@@ -86,48 +86,48 @@ public class Network extends GenericGraph<Network.Vertex, Network.Edge> {
         return new Edge();
     }
 
-    /**
-     * Layouts the network with a force-based layout algorithm. When this method
-     * returns, all vertices will have an appropriate x and y coordinate.
-     *
-     * @param width The width of the containment.
-     * @param height The height of the containment.
-     * @param eps A small value that indicates the threshold to stop the
-     * algorithm.
-     * @param initialize Whether the vertices' position should be randomized
-     * before starting.
-     */
-    public void layout(double width, double height, double eps, boolean initialize) {
+    // /**
+    //  * Layouts the network with a force-based layout algorithm. When this method
+    //  * returns, all vertices will have an appropriate x and y coordinate.
+    //  *
+    //  * @param width The width of the containment.
+    //  * @param height The height of the containment.
+    //  * @param eps A small value that indicates the threshold to stop the
+    //  * algorithm.
+    //  * @param initialize Whether the vertices' position should be randomized
+    //  * before starting.
+    //  */
+    // public void layout(double width, double height, double eps, boolean initialize) {
 
-        // initialize
-        if (initialize) {
-            randomizePositions(width, height);
-        }
+    //     // initialize
+    //     if (initialize) {
+    //         randomizePositions(width, height);
+    //     }
 
-        double totalKineticEnergy;
+    //     double totalKineticEnergy;
 
-        do {
-            totalKineticEnergy = doLayoutStep(1, null, width, height);
+    //     do {
+    //         totalKineticEnergy = doLayoutStep(1, null, width, height);
 
-        } while (totalKineticEnergy > eps);
-    }
+    //     } while (totalKineticEnergy > eps);
+    // }
 
-    /**
-     * Assigns every vertex a random position (uniformly distributed), inside
-     * the given bounds. This is meant to be used as an initial position for the
-     * layout algorithm.
-     *
-     * @param width The maximum for the <i>x</i> value.
-     * @param height The maximum for the <i>y</i> value.
-     */
-    public void randomizePositions(double width, double height) {
-        for (Vertex v : vertices()) {
-            v.getPosition().setX((double) (Math.random() * width));
-            v.getPosition().setY((double) (Math.random() * height));
-            v.getVelocity().setX(0);
-            v.getVelocity().setY(0);
-        }
-    }
+    // /**
+    //  * Assigns every vertex a random position (uniformly distributed), inside
+    //  * the given bounds. This is meant to be used as an initial position for the
+    //  * layout algorithm.
+    //  *
+    //  * @param width The maximum for the <i>x</i> value.
+    //  * @param height The maximum for the <i>y</i> value.
+    //  */
+    // public void randomizePositions(double width, double height) {
+    //     for (Vertex v : vertices()) {
+    //         v.getPosition().setX((double) (Math.random() * width));
+    //         v.getPosition().setY((double) (Math.random() * height));
+    //         v.getVelocity().setX(0);
+    //         v.getVelocity().setY(0);
+    //     }
+    // }
 
     /**
      * Executes a number of steps in the layout algorithm.

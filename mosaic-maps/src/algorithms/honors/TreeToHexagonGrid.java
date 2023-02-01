@@ -219,18 +219,18 @@ public class TreeToHexagonGrid {
         }
     }
 
-    private static Vertex both(Vertex v1, Vertex v2) {
-        if (v1 == null && v2 == null) {
-            return null;
-        }
-        if (v1 == null && v2 != null) {
-            return v2;
-        }
-        if (v2 != null && v1 != v2) {
-            throw new RuntimeException("HELP HELP");
-        }
-        return v1;
-    }
+    // private static Vertex both(Vertex v1, Vertex v2) {
+    //     if (v1 == null && v2 == null) {
+    //         return null;
+    //     }
+    //     if (v1 == null && v2 != null) {
+    //         return v2;
+    //     }
+    //     if (v2 != null && v1 != v2) {
+    //         throw new RuntimeException("HELP HELP");
+    //     }
+    //     return v1;
+    // }
 
     /**
      * Sets the vertex for the TL hexagon of the given tree.

@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import model.Network.Vertex;
-import model.util.CircularListIterator;
+// import model.util.CircularListIterator;
 import model.util.Pair;
 import model.util.Position2D;
 import model.util.Vector2D;

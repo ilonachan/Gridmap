@@ -9,9 +9,9 @@ import Utils.Utils;
 import model.graph.AbstractEdge;
 import model.graph.AbstractGraph;
 import model.graph.AbstractVertex;
-import model.graph.CrossingFinder;
+// import model.graph.CrossingFinder;
 import model.graph.GenericGraph;
-import model.graph.PlanarStraightLineGraph;
+// import model.graph.PlanarStraightLineGraph;
 import model.graph.PlanarStraightLineGraphAlgorithms;
 import model.util.ElementList;
 import model.util.Identifier;
@@ -151,32 +151,32 @@ public class PlanarSubdivision {
         }
     }
 
-    /**
-     * Computes the dual graph of this subdivision. Corresponding vertices and
-     * faces have the same id.
-     */
-    public void computeDual(PlanarStraightLineGraph graph) {
-        graph.clear();
-        for (Face f : faces()) {
-            Vector2D position = Utils.meanPosition(f.getBoundaryVertices());
-            graph.addVertex(position);
-        }
-        ElementList<Boolean> added = new ElementList<>(faces.size(), false);
-        for (Face f : boundedFaces()) {
-            int faceId = f.getId();
-            for (Halfedge h : f.getBoundaryHalfedges()) {
-                int neighbourId = h.getTwin().getFace().getId();
-                if (faceId < neighbourId && !added.get(neighbourId)) {
-                    graph.addEdge(faceId, neighbourId);
-                    added.set(neighbourId, true);
-                }
-            }
-            for (Halfedge h : f.getBoundaryHalfedges()) {
-                int neighbourId = h.getTwin().getFace().getId();
-                added.set(neighbourId, false);
-            }
-        }
-    }
+    // /**
+    //  * Computes the dual graph of this subdivision. Corresponding vertices and
+    //  * faces have the same id.
+    //  */
+    // public void computeDual(PlanarStraightLineGraph graph) {
+    //     graph.clear();
+    //     for (Face f : faces()) {
+    //         Vector2D position = Utils.meanPosition(f.getBoundaryVertices());
+    //         graph.addVertex(position);
+    //     }
+    //     ElementList<Boolean> added = new ElementList<>(faces.size(), false);
+    //     for (Face f : boundedFaces()) {
+    //         int faceId = f.getId();
+    //         for (Halfedge h : f.getBoundaryHalfedges()) {
+    //             int neighbourId = h.getTwin().getFace().getId();
+    //             if (faceId < neighbourId && !added.get(neighbourId)) {
+    //                 graph.addEdge(faceId, neighbourId);
+    //                 added.set(neighbourId, true);
+    //             }
+    //         }
+    //         for (Halfedge h : f.getBoundaryHalfedges()) {
+    //             int neighbourId = h.getTwin().getFace().getId();
+    //             added.set(neighbourId, false);
+    //         }
+    //     }
+    // }
 
     /**
      * Creates a new subdivision restricted to the faces in the specified list.
@@ -676,58 +676,58 @@ public class PlanarSubdivision {
         }
     }
 
-    private static class PlaneSweep {
+    // private static class PlaneSweep {
 
-        PlanarSubdivision ps;
-        ArrayList<Event> events;
+    //     PlanarSubdivision ps;
+    //     ArrayList<Event> events;
 
-        PlaneSweep(PlanarSubdivision ps) {
-            this.ps = ps;
-            // Create events
-            for (Halfedge h : ps.halfedges) {
-                events.add(new Event(h, null));
-            }
-            // Sort in ascending x order (ascending y to break ties)
-            Collections.sort(events);
-            // Set the type of each event
-            ElementList<Boolean> seen = new ElementList<>(ps.halfedges.size(), false);
-            for (Event e : events) {
-                Halfedge h = e.halfedge;
-                if (seen.get(h.getTwin())) {
-                    e.type = EventType.END_SEGMENT;
-                } else {
-                    e.type = EventType.BEGIN_SEGMENT;
-                    seen.set(h, true);
-                }
-            }
-        }
+    //     PlaneSweep(PlanarSubdivision ps) {
+    //         this.ps = ps;
+    //         // Create events
+    //         for (Halfedge h : ps.halfedges) {
+    //             events.add(new Event(h, null));
+    //         }
+    //         // Sort in ascending x order (ascending y to break ties)
+    //         Collections.sort(events);
+    //         // Set the type of each event
+    //         ElementList<Boolean> seen = new ElementList<>(ps.halfedges.size(), false);
+    //         for (Event e : events) {
+    //             Halfedge h = e.halfedge;
+    //             if (seen.get(h.getTwin())) {
+    //                 e.type = EventType.END_SEGMENT;
+    //             } else {
+    //                 e.type = EventType.BEGIN_SEGMENT;
+    //                 seen.set(h, true);
+    //             }
+    //         }
+    //     }
 
-        class Event implements Comparable<Event> {
+    //     class Event implements Comparable<Event> {
 
-            Halfedge halfedge;
-            EventType type;
+    //         Halfedge halfedge;
+    //         EventType type;
 
-            Event(Halfedge halfedge, EventType type) {
-                this.halfedge = halfedge;
-                this.type = type;
-            }
+    //         Event(Halfedge halfedge, EventType type) {
+    //             this.halfedge = halfedge;
+    //             this.type = type;
+    //         }
 
-            @Override
-            public int compareTo(Event e2) {
-                Vector2D p1 = this.halfedge.getSource().getPosition();
-                Vector2D p2 = e2.halfedge.getSource().getPosition();
-                int compare = Double.compare(p1.getX(), p2.getX());
-                if (compare == 0) {
-                    return Double.compare(p1.getY(), p2.getY());
-                } else {
-                    return compare;
-                }
-            }
-        }
+    //         @Override
+    //         public int compareTo(Event e2) {
+    //             Vector2D p1 = this.halfedge.getSource().getPosition();
+    //             Vector2D p2 = e2.halfedge.getSource().getPosition();
+    //             int compare = Double.compare(p1.getX(), p2.getX());
+    //             if (compare == 0) {
+    //                 return Double.compare(p1.getY(), p2.getY());
+    //             } else {
+    //                 return compare;
+    //             }
+    //         }
+    //     }
 
-        enum EventType {
+    //     enum EventType {
 
-            BEGIN_SEGMENT, END_SEGMENT;
-        }
-    }
+    //         BEGIN_SEGMENT, END_SEGMENT;
+    //     }
+    // }
 }

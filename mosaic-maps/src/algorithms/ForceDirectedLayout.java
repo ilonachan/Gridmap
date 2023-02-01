@@ -56,8 +56,8 @@ public final class ForceDirectedLayout {
         blocked = new ElementList<>(currentGrid.numberOfRegions());
         badIterations = new ElementList<>(currentGrid.numberOfRegions(), 0);
 
-        regionsOnCoordinate = new HashMap();
-        neighbourRegionsOnCoordinate = new HashMap();
+        regionsOnCoordinate = new HashMap<>();
+        neighbourRegionsOnCoordinate = new HashMap<>();
         for (MosaicCartogram.MosaicRegion region : currentGrid.regions()) {
             Vector2D barycenter = region.getGuidingShape().continuousBarycenter();
             continuousPositions.add(new Vector2D(barycenter));
@@ -66,13 +66,13 @@ public final class ForceDirectedLayout {
             CellRegion guidingShape = region.getGuidingShape();
             for (Coordinate c : guidingShape.coordinateSet()) {
                 if (!regionsOnCoordinate.containsKey(c)) {
-                    regionsOnCoordinate.put(c, new HashSet());
+                    regionsOnCoordinate.put(c, new HashSet<>());
                 }
                 regionsOnCoordinate.get(c).add(guidingShape);
             }
             for (Coordinate c : guidingShape.neighbours()) {
                 if (!neighbourRegionsOnCoordinate.containsKey(c)) {
-                    neighbourRegionsOnCoordinate.put(c, new HashSet());
+                    neighbourRegionsOnCoordinate.put(c, new HashSet<>());
                 }
                 neighbourRegionsOnCoordinate.get(c).add(guidingShape);
             }
@@ -100,13 +100,13 @@ public final class ForceDirectedLayout {
         //start adding
         for (Coordinate c : guidingShape.coordinateSet()) {
             if (!regionsOnCoordinate.containsKey(c)) {
-                regionsOnCoordinate.put(c, new HashSet());
+                regionsOnCoordinate.put(c, new HashSet<>());
             }
             regionsOnCoordinate.get(c).add(guidingShape);
         }
         for (Coordinate c : guidingShape.neighbours()) {
             if (!neighbourRegionsOnCoordinate.containsKey(c)) {
-                neighbourRegionsOnCoordinate.put(c, new HashSet());
+                neighbourRegionsOnCoordinate.put(c, new HashSet<>());
             }
             neighbourRegionsOnCoordinate.get(c).add(guidingShape);
         }
@@ -246,7 +246,7 @@ public final class ForceDirectedLayout {
         for (Network.Vertex u : weakDual.vertices()) {
             //stores the neighbours of u. 
             //TODO preprocess
-            Set<Network.Vertex> neighbours = new HashSet();
+            Set<Network.Vertex> neighbours = new HashSet<>();
 
             MosaicCartogram.MosaicRegion ru = currentGrid.getRegion(u.getId());
             Vector2D force = new Vector2D(0, 0);

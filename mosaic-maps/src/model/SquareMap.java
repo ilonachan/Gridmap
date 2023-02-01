@@ -113,14 +113,6 @@ public final class SquareMap extends MosaicCartogram {
             return new Square((EuclideanCoordinate) c, v);
         } else {
             throw new IllegalArgumentException();
-
-
-
-
-
-
-
-
         }
     }
 
