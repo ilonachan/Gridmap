@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="GeometryCore1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/GridMapPartitioner/lib/GeometryCore/GeometryCore.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

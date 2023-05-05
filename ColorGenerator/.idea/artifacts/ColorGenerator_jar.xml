@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="ColorGenerator:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/ColorGenerator_jar</output-path>
+    <root id="archive" name="ColorGenerator.jar">
+      <element id="module-output" name="ColorGenerator" />
+    </root>
+  </artifact>
+</component>

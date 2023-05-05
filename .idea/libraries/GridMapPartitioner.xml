@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="GridMapPartitioner">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/GridMapPartitioner/store/GridMapPartitioner.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

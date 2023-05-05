@@ -93,3 +93,5 @@
 *.psess
 *.vsp
 *.vspx
+
+/out/

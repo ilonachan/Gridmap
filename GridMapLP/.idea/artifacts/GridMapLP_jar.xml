@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="GridMapLP:jar">
+    <output-path>$PROJECT_DIR$/store</output-path>
+    <root id="archive" name="GridMapLP.jar">
+      <element id="module-output" name="GridMapLP" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/clp-java-1.16.11-full.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/commons-cli-1.4.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

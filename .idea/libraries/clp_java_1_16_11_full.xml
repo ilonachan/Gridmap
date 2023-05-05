@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="clp-java-1.16.11-full">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/GridMapLP/lib/CLP/clp-java-1.16.11-full.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

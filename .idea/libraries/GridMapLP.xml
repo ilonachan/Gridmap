@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="GridMapLP">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/GridMapLP/store/GridMapLP.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

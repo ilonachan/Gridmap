@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/ColorGenerator/ColorGenerator.iml" filepath="$PROJECT_DIR$/ColorGenerator/ColorGenerator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GridMapLP/GridMapLP.iml" filepath="$PROJECT_DIR$/GridMapLP/GridMapLP.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GridMapPartitioner/GridMapPartitioner.iml" filepath="$PROJECT_DIR$/GridMapPartitioner/GridMapPartitioner.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GridmapCombiner/GridmapCombiner.iml" filepath="$PROJECT_DIR$/GridmapCombiner/GridmapCombiner.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GridmapCombiner/lib/lib.iml" filepath="$PROJECT_DIR$/GridmapCombiner/lib/lib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GridMapPartitioner/lib/lib1.iml" filepath="$PROJECT_DIR$/GridMapPartitioner/lib/lib1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mosaic-maps/mosaic-maps.iml" filepath="$PROJECT_DIR$/mosaic-maps/mosaic-maps.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/refimpl.iml" filepath="$PROJECT_DIR$/.idea/refimpl.iml" />
+    </modules>
+  </component>
+</project>

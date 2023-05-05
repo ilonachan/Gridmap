@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="MosaicMaps">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/mosaic-maps/dist/MosaicMaps.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

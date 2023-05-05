@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="CLI">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/GridMapLP/lib/CLI/commons-cli-1.4-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GridMapLP/lib/CLI/commons-cli-1.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GridMapLP/lib/CLI/commons-cli-1.4-javadoc.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

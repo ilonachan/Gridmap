@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="mosaic-maps:jar">
+    <output-path>$PROJECT_DIR$/dist</output-path>
+    <root id="archive" name="MosaicMaps.jar">
+      <element id="module-output" name="mosaic-maps" />
+    </root>
+  </artifact>
+</component>

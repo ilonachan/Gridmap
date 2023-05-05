@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="ApacheCLI">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/GridMapPartitioner/lib/ApacheCLI/commons-cli-1.4-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GridMapPartitioner/lib/ApacheCLI/commons-cli-1.4-javadoc.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

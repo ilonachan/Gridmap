@@ -1,0 +1,27 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="GridMapPartitioner:jar">
+    <output-path>$PROJECT_DIR$/GridMapPartitioner/store</output-path>
+    <root id="archive" name="GridMapPartitioner.jar">
+      <element id="module-output" name="GridMapPartitioner" />
+      <element id="module-output" name="lib" />
+      <element id="module-output" name="lib1" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/GridMapLP/lib/CLI/commons-cli-1.4-sources.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/GridMapLP/lib/CLI/commons-cli-1.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/GridMapLP/lib/CLI/commons-cli-1.4-javadoc.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/GridMapPartitioner/lib/GeometryCore/GeometryCore.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/GridMapPartitioner/lib/commons-cli-1.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/GridMapPartitioner/lib/GeometryCore.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/GridMapLP/lib/commons-cli-1.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/GridMapLP/lib/clp-java-1.16.11-full.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/GridmapCombiner/lib/commons-cli-1.4-javadoc.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/GridmapCombiner/lib/commons-cli-1.4-tests.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/GridmapCombiner/lib/GeometryCore.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/GridmapCombiner/lib/commons-cli-1.4-sources.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/GridmapCombiner/lib/commons-cli-1.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/GridmapCombiner/lib/commons-cli-1.4-test-sources.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/GridMapPartitioner/store/GridMapPartitioner.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/GridmapCombiner/lib/GeometryCore/GeometryCore.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/GridMapLP/store/GridMapLP.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
