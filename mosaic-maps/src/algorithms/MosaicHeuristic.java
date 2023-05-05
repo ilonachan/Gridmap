@@ -32,7 +32,7 @@ public class MosaicHeuristic {
     private final MosaicCartogram originalGrid;
     private final ArrayList<Separator> separators;
     public MosaicCartogram currentGrid = null;
-    // private MosaicPanel panel = null;
+    private MosaicPanel panel = null;
     private ForceDirectedLayout forceDirectedLayout = null;
 
     public MosaicHeuristic(Map map, Network weakDual, MosaicCartogram originalGrid) {
@@ -52,7 +52,7 @@ public class MosaicHeuristic {
     }
 
     public MosaicCartogram execute(MosaicPanel panel, final int maxNoImproveIterations, final boolean finalize, final boolean exactTiles) {
-        // this.panel = panel;
+        this.panel = panel;
         currentGrid = originalGrid.duplicate();
 
         initializeGuidingShapesPositions(currentGrid);
@@ -114,7 +114,7 @@ public class MosaicHeuristic {
     }
 
     public MosaicCartogram finalize(MosaicPanel panel, boolean exactTiles) {
-        // this.panel = panel;
+        this.panel = panel;
         currentGrid = originalGrid.duplicate();
         if (!gridIsValid()) {
             System.out.println("Bad bad grid!");
@@ -263,7 +263,7 @@ public class MosaicHeuristic {
                             tm.evaluate();
                             if (tm.isValid()) {
                                 tm.execute();
-                                //updatePanel();
+                                updatePanel();
                                 fixed = true;
                                 break;
                             }
@@ -281,7 +281,7 @@ public class MosaicHeuristic {
                                         rm.evaluate();
                                         if (rm.isValid()) {
                                             rm.execute();
-                                            //updatePanel();
+                                            updatePanel();
                                         }
                                     }
                                 }
@@ -384,5 +384,11 @@ public class MosaicHeuristic {
                                + ", Error = " + String.format("% 6.2f", 100 * (1 - ((double) size) / desiredSize)) + "%"
                                + ", SymDiff = " + String.format("%3d", symDiff));
         }
+    }
+
+    private void updatePanel() {
+        //TODO: this method should populate the UI, but I don't know how to write it.
+
+        panel.setCartogram(currentGrid);
     }
 }

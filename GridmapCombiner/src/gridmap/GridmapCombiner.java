@@ -7,10 +7,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import nl.tue.geometrycore.geometry.BaseGeometry;
@@ -33,32 +30,44 @@ public class GridmapCombiner {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        if(args.length < 2) {
+            System.err.println("Needs at least the two input files");
+            System.exit(1);
+        }
+        List<Pair<String,String>> mapAndSites = List.of(new Pair<>(args[0], args[1]));
+        double[] dilations = {0.33};
+        if(args.length >= 3)
+            dilations = Arrays.stream(args[2].split(",")).mapToDouble(Double::parseDouble).toArray();
+        int[] productivities = {10};
+        if(args.length >= 4)
+            productivities = Arrays.stream(args[3].split(",")).mapToInt(s -> Math.toIntExact(Math.round(Double.parseDouble(s)))).toArray();
+
         //which settings to generate gridmaps for. Needs at least 1 option from every categorgie.
 
         //We are constructing args in here for convenience, so we can generate multiple settings. 
         //Easily adapted to work via the commandline instead.
-        List<Double> dilations = new ArrayList(); //default 0.33
+//        List<Double> dilations = new ArrayList(); //default 0.33
 //        dilations.add(0.0);
-        dilations.add(0.33);
+//        dilations.add(0.33);
 //        dilations.add(0.2);
 //        dilations.add(0.5);
 
-        List<Integer> productivities = new ArrayList();//default 10
+//        List<Integer> productivities = new ArrayList();//default 10
 //        productivities.add(15);
-        productivities.add(10);
+//        productivities.add(10);
 //        productivities.add(4);
 //        productivities.add(10);
 //        productivities.add(1);
 
         //Set the inputmap combined with where the sites are located. Sites need to have colors.
-        List<Pair<String, String>> mapAndSites = new ArrayList();
+//        List<Pair<String, String>> mapAndSites = new ArrayList();
 //        mapAndSites.add(new Pair("nederland2014Outline.ipe", "NetherlandsMunicipality2014SitesColor.tsv"));
 //        mapAndSites.add(new Pair("nederlandOutline.ipe", "NetherlandsMunicipalitySitesColor.tsv"));
 //        mapAndSites.add(new Pair("nederlandProvinces.ipe", "NetherlandsMunicipalitySitesColor.tsv"));
 //
 //        mapAndSites.add(new Pair("usaOutline.ipe", "USAStatesColor.tsv"));
 //        mapAndSites.add(new Pair("usaOutlineAndDc.ipe", "USAStatesAndDCColor.tsv"));
-        mapAndSites.add(new Pair("UKMap.ipe", "UKConstituenciesColor.tsv"));
+//        mapAndSites.add(new Pair<>("UKMap.ipe", "UKConstituenciesColor.tsv"));
 //        mapAndSites.add(new Pair("UKMapLocalAuthoritiesStub.ipe", "UKLocalAuthoritiesColor.tsv"));
 
         for (double dilation : dilations) {
@@ -282,7 +291,8 @@ public class GridmapCombiner {
         File f = new File("");
         System.out.println(f.getAbsolutePath());
         //test code
-        String commandLine = "java -Djava.awt.headless=true -jar ../mosaic-maps/dist/MosaicMaps.jar"
+        // -Djava.awt.headless=true
+        String commandLine = "java -jar ../mosaic-maps/dist/MosaicMaps.jar"
                              + " -map " + labeledPartitionOutput
                              + " -data " + mosaicMapWeightInputPath
                              + " -ipe " + mosaicOutputPath

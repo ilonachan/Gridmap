@@ -56,6 +56,15 @@ public class MosaicCellMap {
         double centerY;
 
         //first check if it is a hex or a square
+        /* FIXME: THIS IS A BUG!
+           In square records, the "h" is actually on the FIFTH
+           line after the <path> tag!
+           Hence the program has always treated square cells as hex cells.
+           This is not a big issue, because in effect it just means all
+           cell coordinates are correctly found but shifted .5 units in -y,
+           and with the rescaling step this is automatically fixed...
+           essentially this means no distinction needs to be made here.
+        */
         String line5 = mapLines.get(i + 4);
         boolean square = line5.startsWith("h");
 

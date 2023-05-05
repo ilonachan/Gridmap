@@ -33,6 +33,7 @@ public class Utility {
     public static String executeCommandLine(List<String> commandLineString) {
         try {
             ProcessBuilder pb = new ProcessBuilder(commandLineString);
+            pb.environment().put("WINEDEBUG", "-all");
             Process p = pb.start();
             BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
             StringBuilder builder = new StringBuilder();

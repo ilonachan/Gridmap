@@ -95,10 +95,11 @@ public class MedialAxis {
         String polygonLocation = polygonToCin();
 
         //execute process and get data
-        String fileLocation = "external/sdg-voronoi-edges.exe";
+        String fileLocation = "../GridMapPartitioner/external/sdg-voronoi-edges.exe";
 
-
-        List<String> command = Arrays.asList(fileLocation, polygonLocation);
+        // TODO: this command has to depend on the operating system
+        // (which is awful for a java program but that's just how it is)
+        List<String> command = Arrays.asList("wine", fileLocation, polygonLocation);
         System.out.println("starting cgal");
         String medialAxisString = Utility.executeCommandLine(command);
         System.out.println("cgal done");

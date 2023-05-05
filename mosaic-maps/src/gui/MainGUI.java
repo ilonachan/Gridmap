@@ -27,6 +27,8 @@ import model.util.KML.KMLToIpeConverter;
 import parameter.ParameterManager;
 import parameter.ParameterManager.Application.GridType;
 
+import javax.swing.*;
+
 public class MainGUI {
 
     // private static final boolean runHonorsAlgorithms = false;
@@ -237,6 +239,12 @@ public class MainGUI {
             final double SCALING_THRESHOLD = 10;// 7 or 10
             final double SCALING_FACTOR = 1.4142;
 
+            JFrame showFrame = new JFrame("Mosaic Cartogram");
+            showFrame.setContentPane(cartogramPanel);
+            showFrame.setVisible(true);
+            cartogramPanel.setVisible(true);
+            cartogramPanel.setSize(600,400);
+
             System.out.println("Full program");
             // Find average number of tiles per region
             int totalTiles = 0;
@@ -273,7 +281,7 @@ public class MainGUI {
                     componentCartogram = heuristic.execute(cartogramPanel, 5000, finalRun, finalRun && EXACT_TILES);
 
                     System.out.println("start export coordinates");
-                    componentCartogram.exportCoordinates("coordinates" + scalingIteration + ".coo");
+                    componentCartogram.exportCoordinates("intermediate/coordinates_" + component.getId() + "_" + scalingIteration + ".coo");
                     component.setCartogram(componentCartogram);
                 }
                 if (!finalRun) {

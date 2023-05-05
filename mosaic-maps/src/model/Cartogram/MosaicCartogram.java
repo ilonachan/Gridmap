@@ -343,7 +343,7 @@ public abstract class MosaicCartogram {
     public void exportCoordinates(String fileName) {
         BufferedWriter bw = null;
         try {
-            bw = new BufferedWriter(new FileWriter(new File(fileName)));
+            bw = new BufferedWriter(new FileWriter(fileName));
             for (int i = 0; i < regions.size(); i++) {
                 MosaicRegion region = regions.get(i);
                 bw.write("ID " + i);

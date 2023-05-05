@@ -41,7 +41,7 @@ public class GridMapLP {
      * Used in case provinces are present. In the output, cells are grouped in
      * ipelayers per province.
      */
-    private Path provinceMapping = Paths.get("../Data/maps/Sites/provinceMapping.tsv");
+    private Path provinceMapping = Paths.get("../Data/maps/Sites/ProvinceMapping.tsv");
     private CellContainer grid;
     private MosaicCellMap mosaicCellMap;
     private SiteMap siteMap;
