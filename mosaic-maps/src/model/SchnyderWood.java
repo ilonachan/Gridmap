@@ -47,8 +47,8 @@ public class SchnyderWood {
         rootT2 = this.graph.getVertex(sRootT2.getId());
         rootT3 = this.graph.getVertex(sRootT3.getId());
         execute(graph.numberOfVertices());
-        parents.set(rootT2, subdivision.getVertex(rootT1.getId()));
-        parents.set(rootT3, subdivision.getVertex(rootT1.getId()));
+        parents.set(rootT2, sRootT1);
+        parents.set(rootT3, sRootT1);
     }
 
     public ElementList<PlanarSubdivision.Vertex> getParents() {

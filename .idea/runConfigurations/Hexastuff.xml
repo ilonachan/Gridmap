@@ -2,7 +2,7 @@
   <configuration default="false" name="Hexastuff" type="Application" factoryName="Application" nameIsGenerated="true">
     <option name="MAIN_CLASS_NAME" value="main.Hexastuff" />
     <module name="mosaic-maps" />
-    <option name="PROGRAM_PARAMETERS" value="-map combinedOutput/UKMap.ipeDil0.33Pro10.0/partitionLabeled.ipe -data combinedOutput/UKMap.ipeDil0.33Pro10.0/weights.tsv -ipe combinedOutput/UKMap.ipeDil0.33Pro10.0/mosaicMapOutput.ipe -unit 1 -square" />
+    <option name="PROGRAM_PARAMETERS" value="-map combinedOutput/nederland2014Outline.ipeDil0.33Pro10.0/partitionLabeled.ipe -data combinedOutput/nederland2014Outline.ipeDil0.33Pro10.0/weights.tsv -ipe combinedOutput/nederland2014Outline.ipeDil0.33Pro10.0/mosaicMapOutput.ipe -unit 1 -square" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Data" />
     <extension name="coverage">
       <pattern>

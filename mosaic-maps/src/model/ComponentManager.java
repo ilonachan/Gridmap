@@ -126,7 +126,7 @@ public class ComponentManager {
 //            }
             Map componentMap = component.getMap();
             Network componentWeakDual = component.getWeakDual();
-            GridEmbedder embedder = new GridEmbedder(componentMap, componentWeakDual);
+            GridEmbedder embedder = new GridEmbedder(componentWeakDual);
             //IpeExporter.export(embedder.getModifiedGraph(), "graph.ipe");
             embedder.computeOrderlySpanningTreeSchnyder();
             embedder.computeHeights();

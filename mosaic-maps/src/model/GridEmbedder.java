@@ -12,7 +12,6 @@ import Utils.Utils;
 import model.HexagonalMap.BarycentricCoordinate;
 import model.Cartogram.MosaicCartogram.Coordinate;
 import model.SquareMap.EuclideanCoordinate;
-import model.subdivision.Map;
 import model.subdivision.PlanarSubdivision;
 import model.subdivision.PlanarSubdivisionAlgorithms;
 import model.util.CircularListIterator;
@@ -48,17 +47,7 @@ public class GridEmbedder {
     // private ElementList<Boolean> deletedEdge;
     // private int stepCounter;
 
-    public GridEmbedder(Map map, Network originalGraph) {
-//        Map.Face greece = map.getFace("GRC");
-//        if (greece != null) {
-//            System.out.println("GRC id = " + greece.getId());
-//            for (Map.Halfedge h : greece.getBoundaryHalfedges()) {
-//                Map.Face neighbour = h.getTwin().getFace();
-//                if (neighbour.getLabel() != null) {
-//                    System.out.println(neighbour);
-//                }
-//            }
-//        }
+    public GridEmbedder(Network originalGraph) {
         this.originalGraph = originalGraph;
 
 //        debug only

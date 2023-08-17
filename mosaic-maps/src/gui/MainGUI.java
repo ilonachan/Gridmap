@@ -1,6 +1,6 @@
 package gui;
 
-import java.awt.Color;
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -177,7 +177,7 @@ public class MainGUI {
         private final Double UNIT_DATA;
         private final GridType TYPE;
         private final boolean EXACT_TILES;
-        private final boolean EXIT_APP = true;
+        private final boolean EXIT_APP = false;
         private Map map = null;
         private ComponentManager manager = null;
         private final Double unitData;
@@ -241,9 +241,11 @@ public class MainGUI {
 
             JFrame showFrame = new JFrame("Mosaic Cartogram");
             showFrame.setContentPane(cartogramPanel);
+            showFrame.setSize(600,400);
             showFrame.setVisible(true);
             cartogramPanel.setVisible(true);
             cartogramPanel.setSize(600,400);
+            cartogramPanel.setMinimumSize(new Dimension(600,400));
 
             System.out.println("Full program");
             // Find average number of tiles per region

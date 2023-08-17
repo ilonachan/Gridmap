@@ -87,6 +87,7 @@ public class MosaicHeuristic {
                 prevQuality = currentQuality;
                 currentBadIterations = 0;
                 bestGrid = currentGrid;
+                updatePanel();
             } else {
                 currentBadIterations++;
             }
