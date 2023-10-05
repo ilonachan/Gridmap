@@ -556,9 +556,9 @@ public final class Polisher {
     //                       + "<page>\n"
     //                       + "<layer name=\"cells\"/>\n"
     //                       + "<group layer=\"cells\">\n";
-
+    //
     //     String cells = "";
-
+    //
     //     for (MosaicRegion r : currentGrid.regions()) {
     //         Color color = r.getVertex().getColor();
     //         for (MosaicCartogram.Coordinate c : r) {
@@ -566,19 +566,19 @@ public final class Polisher {
     //             cells += cell + "\n";
     //         }
     //     }
-
+    //
     //     outputString += preamble;
     //     outputString += cells;
     //     outputString += "</group>\n";
     //     outputString += pathString.toString();
-
+    //
     //     for (MosaicRegion r : currentGrid.regions()) {
     //         int hexError = r.getHexError();
     //         MosaicCartogram.Coordinate barycenter = r.barycenter();
     //         Point2D p = barycenter.toPoint2D();
     //         if (hexError != 0) {
     //             System.out.println("hexError for R = " + hexError);
-
+    //
     //             outputString += "<text transformations=\"translations\" "
     //                             + "pos=\"" + p.getX() + " " + p.getY() + "\" "
     //                             + "stroke=\"black\" type=\"label\" width=\"4.981\" height=\"6.42\" depth=\"0\" valign=\"baseline\">"
@@ -586,20 +586,20 @@ public final class Polisher {
     //                             + "</text>";
     //         }
     //     }
-
+    //
     //     outputString += "</page>\n"
     //                     + "</ipe>";
-
+    //
     //     try {
     //         FileWriter fw = new FileWriter(new File("../Data/output/debug" + printCount + ".ipe"));
     //         fw.append(outputString);
     //         fw.flush();
     //         fw.close();
     //     } catch (Exception e) {
-
+    //
     //     }
     //     printCount++;
-
+    //
     // }
 
     // /**
@@ -614,11 +614,11 @@ public final class Polisher {
     //     Point2D cP = c.toPoint2D();
     //     double midX = cP.getX();
     //     double midY = cP.getY();
-
+    //
     //     double r = ((double) color.getRed()) / 255.0;
     //     double g = ((double) color.getGreen()) / 255.0;
     //     double b = ((double) color.getBlue()) / 255.0;
-
+    //
     //     String square = "<path fill=\"" + r + " " + g + " " + b + "\">\n"
     //                     + (midX - 0.5) + " " + (midY - 0.5) + " m\n"
     //                     + (midX + 0.5) + " " + (midY - 0.5) + " l\n"

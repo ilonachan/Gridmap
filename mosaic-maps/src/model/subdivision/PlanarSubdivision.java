@@ -210,6 +210,7 @@ public class PlanarSubdivision {
                 Vertex newVertex = restricted.createVertex();
                 newVertex.setId(restricted.nextVertexId());
                 newVertex.setPosition(new Vector2D(oldVertex.getPosition()));
+                // TODO: this looks incorrect! Wouldn't this add the same vertex once for each face that uses it?
                 restricted.vertices.add(newVertex);
                 correspondingVertices.set(oldVertex, newVertex);
             }
@@ -226,6 +227,18 @@ public class PlanarSubdivision {
             Vertex oldTarget = oldHalfedge.getTarget();
             Vertex newSource = correspondingVertices.get(oldSource);
             Vertex newTarget = correspondingVertices.get(oldTarget);
+            // TODO: this algorithm is incorrect!
+            // Take the following example:
+            //
+            // o----o----o----o
+            // |    | xx |    |
+            // |    o----o    |
+            // |    | xx |    |
+            // o----o----o----o
+            //
+            // All the vertices of the two removed faces will still exist...
+            // which will cause all of their edges to be preserved! But that's
+            // gonna cause the resulting subdivision to be invalid.
             if (newSource != null && newTarget != null) {
                 Halfedge newHalfedge = restricted.createHalfedge();
                 newHalfedge.setId(restricted.nextHalfedgeId());

@@ -757,8 +757,8 @@ public abstract class MosaicCartogram {
                     if (!connectors.contains(c)) {
                         boolean alreadyIn = false;
                         for (int j = 0; j < numHexagons - connectors.size() - 1; j++) {
-                            WeightedObject<Coordinate, Double> wo = sortedIntersected.get(j);
-                            if (wo.getObject().equals(c)) {
+                            Coordinate c2 = sortedIntersected.get(j).getObject();
+                            if (c2.equals(c)) {
                                 alreadyIn = true;
                                 break;
                             }
