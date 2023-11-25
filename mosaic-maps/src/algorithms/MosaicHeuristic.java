@@ -33,7 +33,6 @@ public class MosaicHeuristic {
     private final ArrayList<Separator> separators;
     public MosaicCartogram currentGrid = null;
     private MosaicPanel panel = null;
-    private ForceDirectedLayout forceDirectedLayout = null;
 
     public MosaicHeuristic(Map map, Network weakDual, MosaicCartogram originalGrid) {
         this.map = map;
@@ -63,7 +62,7 @@ public class MosaicHeuristic {
 
         slideBlocks();
         //Initializing done. Use force directed layout for rest
-        forceDirectedLayout = new ForceDirectedLayout(currentGrid, weakDual);
+        ForceDirectedLayout forceDirectedLayout = new ForceDirectedLayout(currentGrid, weakDual);
 
         //We improve it untill we can not improve it within maxNoImproveIterations iterations
         int currentBadIterations = 0;

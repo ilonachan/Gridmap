@@ -520,20 +520,20 @@ public class ComponentManager {
     }
 
 //     private Coordinate getCentroid(Iterable<MosaicRegion> regions) {
-
+//
 //         Class<? extends Coordinate> coordinateClass = null;
 //         for (MosaicRegion r : regions) {
 //             coordinateClass = r.barycenter().getClass();
 //             break;
 //         }
 //         Coordinate centroid = null;
-
+//
 //         if (coordinateClass == BarycentricCoordinate.class) {
 //             centroid = new BarycentricCoordinate(0, 0, 0);
 //         } else if (coordinateClass == EuclideanCoordinate.class) {
 //             centroid = new EuclideanCoordinate(0, 0);
 //         }
-
+//
 //         double count = 0;
 //         for (MosaicRegion r : regions) {
 //             Coordinate barycenter = r.barycenter();

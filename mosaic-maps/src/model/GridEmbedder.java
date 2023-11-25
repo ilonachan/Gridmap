@@ -188,6 +188,7 @@ public class GridEmbedder {
             int offset = subtreeOffset.get(vSub);
             for (int i = parentHeight; i < height; i++) {
                 for (int j = 0; j < width; j++) {
+                    // Difference between both
                     EuclideanCoordinate c = new EuclideanCoordinate(j + offset, -i);
                     if (id < originalGraph.numberOfVertices()) {
                         Network.Vertex vDual = originalGraph.getVertex(id);
@@ -203,12 +204,15 @@ public class GridEmbedder {
         EuclideanCoordinate[] occupied = cartogram.getCoordinateArray();
         for (EuclideanCoordinate c : occupied) {
             Network.Vertex v = cartogram.getVertex(c);
+            // Difference between both
             EuclideanCoordinate unitMove = new EuclideanCoordinate(1, 0);
             EuclideanCoordinate leftmost = c;
             do {
                 leftmost = leftmost.minus(unitMove);
+            // Difference between both
             } while (leftmost.getX() > 0 && cartogram.getVertex(leftmost) == null
                     && !blankCoordinates.contains(leftmost));
+            // Difference between both
             if (leftmost.getX() > 0 && !blankCoordinates.contains(leftmost)) {
                 Coordinate current = c.minus(unitMove);
                 while (!current.equals(leftmost)) {
@@ -219,8 +223,10 @@ public class GridEmbedder {
             EuclideanCoordinate rightmost = c;
             do {
                 rightmost = rightmost.plus(unitMove);
+            // Difference between both
             } while (rightmost.getX() < subtreeWidth.get(top) && cartogram.getVertex(rightmost) == null
                     && !blankCoordinates.contains(rightmost));
+            // Difference between both
             if (rightmost.getX() < subtreeWidth.get(top) && !blankCoordinates.contains(rightmost)) {
                 Coordinate current = c.plus(unitMove);
                 while (!current.equals(rightmost)) {
@@ -266,16 +272,16 @@ public class GridEmbedder {
 //         boundary.add(top);
 //         boundary.add(left);
 //         boundary.add(right);
-
+//
 //         if (DRAW_STEPS) {
 //             deletedEdge = new ElementList<>(graph.numberOfEdges(), false);
 //             stepCounter = 0;
 //             exportState();
 //         }
-
+//
 //         // Execute magical function that I don't quite understand
 //         block(top, left, boundary);
-
+//
 //         // Compute the counterclockwise preordering
 //         computeLabelsAndWidth(top);
 // //        //debuf only
@@ -462,7 +468,7 @@ public class GridEmbedder {
     //     }
     //     parent.set(v, p);
     //     deleted.set(v, true);
-
+    //
     //     if (DRAW_STEPS) {
     //         Network.Vertex nv = graph.getVertex(v.getId());
     //         PlanarSubdivision.Vertex current = nextV;
@@ -477,7 +483,7 @@ public class GridEmbedder {
     //         deletedEdge.set(e, true);
     //         exportState();
     //     }
-
+    //
     //     // Find the vertices on the same side as prev(G,v) that will be part of
     //     // the boundary when v is deleted
     //     LinkedList<PlanarSubdivision.Vertex> leftBoundary = new LinkedList<>();
@@ -522,7 +528,7 @@ public class GridEmbedder {
     //             leftCount.set(current, leftCount.get(current) + 1);
     //             current = boundaryIterator.next();
     //         } while (current != v);
-
+    //
     //         current = boundaryIterator.next();
     //         while (current != p) {
     //             rightBoundary.add(current);
@@ -531,7 +537,7 @@ public class GridEmbedder {
     //         }
     //         rightBoundary.addFirst(p);
     //         rightCount.set(p, rightCount.get(p) + 1);
-
+    //
     //         while (current != r) {
     //             leftBoundary.add(current);
     //             leftCount.set(current, leftCount.get(current) + 1);
@@ -548,7 +554,7 @@ public class GridEmbedder {
     //             current = cit.next();
     //             inCCW.set(current, true);
     //         } while (current != v);
-
+    //
     //         inCW.set(v, true);
     //         do {
     //             current = cit.next();
@@ -606,7 +612,7 @@ public class GridEmbedder {
 
     // private ArrayList<LinkedList<PlanarSubdivision.Vertex>> computeBiconnectedComponents(
     //         LinkedList<PlanarSubdivision.Vertex> boundary, ElementList<Integer> count) {
-
+    //
     //     ArrayList<LinkedList<PlanarSubdivision.Vertex>> components = new ArrayList<>();
     //     ArrayDeque<LinkedList<PlanarSubdivision.Vertex>> componentStack = new ArrayDeque<>();
     //     LinkedList<PlanarSubdivision.Vertex> activeBoundary = new LinkedList<>();
