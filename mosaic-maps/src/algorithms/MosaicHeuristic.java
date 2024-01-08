@@ -60,7 +60,11 @@ public class MosaicHeuristic {
             System.out.println("Bad bad grid!");
         }
 
+        updatePanel();
+
         slideBlocks();
+
+        updatePanel();
         //Initializing done. Use force directed layout for rest
         ForceDirectedLayout forceDirectedLayout = new ForceDirectedLayout(currentGrid, weakDual);
 
@@ -80,6 +84,8 @@ public class MosaicHeuristic {
             //update the regions with releasing and taking.
             runIteration();
 
+            updatePanel();
+
             //check if it improved
             Pair<Double, Double> currentQuality = getGridQualityPair();
             if (currentQuality.compareTo(prevQuality) == -1) {
@@ -92,6 +98,7 @@ public class MosaicHeuristic {
             }
         }
         currentGrid = bestGrid;
+        updatePanel();
         System.out.println("iteration = " + iteration);
         long endTime = System.currentTimeMillis();
         System.out.println("TotalTime = " + (endTime - startTime));

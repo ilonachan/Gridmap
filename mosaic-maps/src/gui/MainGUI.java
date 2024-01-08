@@ -270,6 +270,7 @@ public class MainGUI {
                 } else {
                     manager.updateUnitData(finalRun ? unitData : currentUnitData);
                 }
+                cartogramPanel.setCartogram(manager.getComponent(0).getCartogram());
                 if (finalRun)
                     System.out.println("Final run with UNIT_DATA = " + unitData);
                 else

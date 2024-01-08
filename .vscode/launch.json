@@ -1,0 +1,37 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Current File",
+      "request": "launch",
+      "mainClass": "${file}"
+    },
+    {
+      "type": "java",
+      "name": "Tree",
+      "request": "launch",
+      "mainClass": "algorithms.honors.Tree",
+      "projectName": "refimpl_a6db7aa8"
+    },
+    {
+      "type": "java",
+      "name": "Hexastuff",
+      "request": "launch",
+      "mainClass": "main.Hexastuff",
+      "projectName": "refimpl_a6db7aa8",
+      "cwd": "${workspaceFolder}/Data/combinedOutput/regressionTest",
+      "args": "-map nl2014_mine_partition.ipe -data nl2014_mine_weights.tsv -ipe nl2014_mine_out.ipe -unit 1 -square -autocolor"
+    },
+    {
+      "type": "java",
+      "name": "KMLToIpeConverter",
+      "request": "launch",
+      "mainClass": "model.util.KML.KMLToIpeConverter",
+      "projectName": "refimpl_a6db7aa8"
+    }
+  ]
+}

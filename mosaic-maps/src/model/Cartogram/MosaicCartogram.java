@@ -564,6 +564,7 @@ public abstract class MosaicCartogram {
             for (int i = 0; i <= SAMPLE; i++) {
                 double ty = 0;
                 for (int j = 0; j <= SAMPLE; j++) {
+                    System.out.println("Region "+f.getLabel().getText()+", iteration "+i+","+j+" / "+SAMPLE);
                     Pair<CellRegion, Double> regionPair = computeDesiredRegion(f, factor, tx, ty);
                     CellRegion region = regionPair.getFirst();
                     double quality = regionPair.getSecond();
