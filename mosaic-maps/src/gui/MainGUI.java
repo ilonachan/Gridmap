@@ -244,7 +244,6 @@ public class MainGUI {
             showFrame.setSize(600,400);
             showFrame.setVisible(true);
             cartogramPanel.setVisible(true);
-            cartogramPanel.setSize(600,400);
             cartogramPanel.setMinimumSize(new Dimension(600,400));
 
             System.out.println("Full program");
@@ -271,6 +270,8 @@ public class MainGUI {
                     manager.updateUnitData(finalRun ? unitData : currentUnitData);
                 }
                 cartogramPanel.setCartogram(manager.getComponent(0).getCartogram());
+                IpeExporter.exportCartogram(manager.getComponent(0).getCartogram(), "test_cartogram.ipe");
+                manager.getComponent(0).getCartogram().export("../../../../gridmaps/rust-wasm/test/cache/test_cartogram_cross_j.ron");
                 if (finalRun)
                     System.out.println("Final run with UNIT_DATA = " + unitData);
                 else

@@ -408,6 +408,39 @@ public abstract class MosaicCartogram {
         }
     }
 
+    public void export(String fileName) {
+        BufferedWriter bw = null;
+        int[] REGION_MAP = {1,14,2,3,4,5,9,10,11,7,15,8,6,12,13};
+        try {
+            bw = new BufferedWriter(new FileWriter(fileName));
+            bw.write("(\n    cells: [\n");
+            for (Cell c : this.cells()) {
+                bw.write(String.format("        ((\n            x:%d,\n            y:%d,\n            hex:false,\n        ), %d),\n", c.getCoordinate().getComponents()[0],c.getCoordinate().getComponents()[1], REGION_MAP[c.getVertex().getId()]));
+            }
+            bw.write("    ],\n    guiding_shapes: [\n");
+
+            for (int i = 0; i < regions.size(); i++) {
+                MosaicRegion region = regions.get(i);
+                bw.write(String.format("        (\n            id: %d,\n            cells: [\n", REGION_MAP[region.getId()]));
+                for (Coordinate c : region.getGuidingShape().coordinateSet()) {
+                    bw.write(String.format("                (\n                    x:%d,\n                    y:%d,\n                    hex:false,\n                ),\n", c.getComponents()[0],c.getComponents()[1], region.getId()));
+                }
+                bw.write(String.format("            ],\n            translation_continuous: (%.16f, %.16f),\n", region.guidingShapeTranslation.getX(), region.guidingShapeTranslation.getY()));
+                bw.write(String.format("            translation_cell: (\n                x:%d,\n                y:%d,\n                hex:false,\n            ),\n", region.totalTranslation.getComponents()[0], region.totalTranslation.getComponents()[0]));
+                bw.write(String.format("            scale: %.16f,\n        ),\n", region.factor));
+            }
+            bw.write("    ],\n    hex:false,\n)");
+        } catch (IOException ex) {
+            Logger.getLogger(IpeExporter.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                bw.close();
+            } catch (IOException ex) {
+                Logger.getLogger(IpeExporter.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
     public abstract MosaicCartogram duplicate();
 
     /**

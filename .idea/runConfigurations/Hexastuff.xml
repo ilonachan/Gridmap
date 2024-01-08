@@ -2,8 +2,8 @@
   <configuration default="false" name="Hexastuff" type="Application" factoryName="Application" nameIsGenerated="true">
     <option name="MAIN_CLASS_NAME" value="main.Hexastuff" />
     <module name="mosaic-maps" />
-    <option name="PROGRAM_PARAMETERS" value="-map combinedOutput/nederland2014Outline.ipeDil0.33Pro10.0/partitionLabeled.ipe -data combinedOutput/nederland2014Outline.ipeDil0.33Pro10.0/weights.tsv -ipe combinedOutput/nederland2014Outline.ipeDil0.33Pro10.0/mosaicMapOutput.ipe -unit 1 -square" />
-    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Data" />
+    <option name="PROGRAM_PARAMETERS" value="-map nl2014_mine_partition.ipe -data nl2014_mine_weights.tsv -ipe nl2014_mine_out.ipe -unit 1 -square -autocolor" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Data/combinedOutput/regressionTest" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="main.*" />

@@ -126,14 +126,15 @@ public class ComponentManager {
 //            }
             Map componentMap = component.getMap();
             Network componentWeakDual = component.getWeakDual();
-            GridEmbedder embedder = new GridEmbedder(componentWeakDual);
-            //IpeExporter.export(embedder.getModifiedGraph(), "graph.ipe");
-            embedder.computeOrderlySpanningTreeSchnyder();
-            embedder.computeHeights();
             MosaicCartogram componentCartogram = createCartogram(componentMap, componentWeakDual);
             // This seems like it could have been done at the end, or even separate from
             // this function entirely!
             componentCartogram.computeDesiredRegions(unitData, guidingShapeSamples);
+
+            GridEmbedder embedder = new GridEmbedder(componentWeakDual);
+            //IpeExporter.export(embedder.getModifiedGraph(), "graph.ipe");
+            embedder.computeOrderlySpanningTreeSchnyder();
+            embedder.computeHeights();
             embedder.initializeCartogram(componentCartogram);
             component.setCartogram(componentCartogram);
         }
