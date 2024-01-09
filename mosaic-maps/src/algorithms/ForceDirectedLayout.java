@@ -3,8 +3,6 @@ package algorithms;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.IntStream;
 
 import Utils.RonExporter;
 import Utils.Utils;
@@ -121,18 +119,30 @@ public final class ForceDirectedLayout {
 
     public static int currentIter = -1;
 
+    private void outputCurState(boolean out) {
+        int[] REGION_MAP = { 1, 14, 2, 3, 4, 5, 9, 10, 11, 7, 15, 8, 6, 12, 13 };
+
+        Utils.writeToFile("../../../../gridmaps/rust-wasm/test/fdl/" + (currentIter) + (out ? "_output" : "_input")+"_grid.ron",
+                this.currentGrid.toRon());
+        RonExporter r = new RonExporter();
+        Utils.writeToFile("../../../../gridmaps/rust-wasm/test/fdl/" + (currentIter) + (out ? "_output" : "_input")+"_state.ron",
+                r.tuple(r.field("bad_iterations",
+                        r.struct(Utils.enumerate(this.badIterations.stream()).map((Pair<Integer, Integer> p) -> {
+                            int bad = p.getFirst();
+                            int region = p.getSecond();
+                            return r.field("" + REGION_MAP[region], bad);
+                        }))), r.field("continuous_positions", r.struct(
+                                Utils.enumerate(this.continuousPositions.stream()).map((Pair<Vector2D, Integer> p) -> {
+                                    Vector2D bad = p.getFirst();
+                                    int region = p.getSecond();
+                                    return r.field("" + REGION_MAP[region],
+                                            String.format("(%.16f, %.16f)", bad.getX(), bad.getY()));
+                                })))));
+    }
+
     public boolean runModel(Map map) {
         currentIter++;
-        int[] REGION_MAP = { 1, 14, 2, 3, 4, 5, 9, 10, 11, 7, 15, 8, 6, 12, 13 };
-        
-        Utils.writeToFile("../../../../gridmaps/rust-wasm/test/fdl/"+(currentIter)+"_input_grid.ron", this.currentGrid.toRon());
-        RonExporter r = new RonExporter();
-        Utils.writeToFile("../../../../gridmaps/rust-wasm/test/fdl/"+(currentIter)+"_input_baditers.ron",
-                r.struct(Utils.enumerate(this.badIterations.stream()).map((Pair<Integer, Integer> p) -> {
-                    int bad = p.getFirst();
-                    int region = p.getSecond();
-                    return r.field("" + REGION_MAP[region], bad);
-                })));
+        this.outputCurState(false);
 
         ElementList<MosaicCartogram.Coordinate> translations = new ElementList<>(currentGrid.numberOfRegions(),
                 currentGrid.zeroVector());
@@ -207,13 +217,7 @@ public final class ForceDirectedLayout {
             } // end of for loop
               // Still in while loop
             if (stop) {
-                Utils.writeToFile("../../../../gridmaps/rust-wasm/test/fdl/"+(currentIter)+"_output_grid.ron", this.currentGrid.toRon());
-                Utils.writeToFile("../../../../gridmaps/rust-wasm/test/fdl/"+(currentIter)+"_output_baditers.ron",
-                        r.struct(Utils.enumerate(this.badIterations.stream()).map((Pair<Integer, Integer> p) -> {
-                            int bad = p.getFirst();
-                            int region = p.getSecond();
-                            return r.field("" + region, bad);
-                        })));
+                this.outputCurState(true);
                 return true;
             }
         }
