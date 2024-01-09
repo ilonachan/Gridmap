@@ -1,12 +1,21 @@
 package Utils;
 
-
 import java.awt.Color;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiFunction;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import model.Network.Vertex;
+import model.util.IpeExporter;
 // import model.util.CircularListIterator;
 import model.util.Pair;
 import model.util.Position2D;
@@ -37,7 +46,7 @@ public class Utils {
      *
      * @param vertices Vertices to calculate color of.
      * @return Average of colors of given vertices, or black if no vertices are
-     * given ({@code vertices == null} or {@code vertices.size() == 0}).
+     *         given ({@code vertices == null} or {@code vertices.size() == 0}).
      */
     public static Color averageVertexColor(ArrayList<Vertex> vertices) {
         if (vertices == null || vertices.isEmpty()) {
@@ -61,7 +70,8 @@ public class Utils {
     }
 
     public static double signedTriangleArea(Vector2D v1, Vector2D v2, Vector2D v3) {
-        return ((v2.getX() - v1.getX()) * (v3.getY() - v1.getY()) - (v2.getY() - v1.getY()) * (v3.getX() - v1.getX())) / 2;
+        return ((v2.getX() - v1.getX()) * (v3.getY() - v1.getY()) - (v2.getY() - v1.getY()) * (v3.getX() - v1.getX()))
+                / 2;
     }
 
     public static int triangleOrientation(Vector2D v1, Vector2D v2, Vector2D v3) {
@@ -79,9 +89,11 @@ public class Utils {
         return triangleOrientation(p1.getPosition(), p2.getPosition(), p3.getPosition());
     }
 
-//    public static int triangleOrientation(Position2D p1, Position2D p2, Position2D p3) {
-//        return triangleOrientation(p1.getPosition(), p2.getPosition(), p3.getPosition());
-//    }
+    // public static int triangleOrientation(Position2D p1, Position2D p2,
+    // Position2D p3) {
+    // return triangleOrientation(p1.getPosition(), p2.getPosition(),
+    // p3.getPosition());
+    // }
     public static int counterclockwiseCompare(Vector2D center, Vector2D v1, Vector2D v2) {
         Quadrant q1 = Vector2D.difference(v1, center).quadrant();
         Quadrant q2 = Vector2D.difference(v2, center).quadrant();
@@ -245,7 +257,8 @@ public class Utils {
         return topmost;
     }
 
-    public static Pair<Double, Double> lineSegmentIntersection(Pair<Double, Double> startP1, Pair<Double, Double> endP1, Pair<Double, Double> startP2, Pair<Double, Double> endP2) {
+    public static Pair<Double, Double> lineSegmentIntersection(Pair<Double, Double> startP1, Pair<Double, Double> endP1,
+            Pair<Double, Double> startP2, Pair<Double, Double> endP2) {
         Vector2D p0 = new Vector2D(startP1.getFirst(), startP2.getSecond());
         Vector2D p1 = new Vector2D(endP1.getFirst(), endP1.getSecond());
         Vector2D q0 = new Vector2D(startP2.getFirst(), startP2.getSecond());
@@ -255,5 +268,40 @@ public class Utils {
             return null;
         }
         return new Pair<Double, Double>(lineSegmentIntersection.getX(), lineSegmentIntersection.getY());
+    }
+
+    public static void writeToFile(String filename, String content) {
+        try (FileWriter fw = new FileWriter(filename); BufferedWriter bw = new BufferedWriter(fw)) {
+            bw.write(content);
+        } catch (IOException ex) {
+            Logger.getLogger(IpeExporter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static <A, B, C> Stream<C> zip(Stream<A> streamA, Stream<B> streamB, BiFunction<A, B, C> zipper) {
+        final Iterator<A> iteratorA = streamA.iterator();
+        final Iterator<B> iteratorB = streamB.iterator();
+        final Iterator<C> iteratorC = new Iterator<C>() {
+            @Override
+            public boolean hasNext() {
+                return iteratorA.hasNext() && iteratorB.hasNext();
+            }
+
+            @Override
+            public C next() {
+                return zipper.apply(iteratorA.next(), iteratorB.next());
+            }
+        };
+        final boolean parallel = streamA.isParallel() || streamB.isParallel();
+        return iterToStream(() -> iteratorC, parallel);
+    }
+
+    public static <T> Stream<T> iterToStream(Iterable<T> iterable, boolean parallel) {
+        return StreamSupport.stream(iterable.spliterator(), parallel);
+    }
+
+    public static <A> Stream<Pair<A, Integer>> enumerate(Stream<A> stream) {
+        AtomicInteger index = new AtomicInteger();
+        return Utils.zip(stream, Stream.generate(() -> index.getAndIncrement()), (a, b) -> new Pair<>(a, b));
     }
 }

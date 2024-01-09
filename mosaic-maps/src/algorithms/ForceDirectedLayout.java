@@ -3,6 +3,11 @@ package algorithms;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.IntStream;
+
+import Utils.RonExporter;
+import Utils.Utils;
 import model.Cartogram.MosaicCartogram;
 import model.Cartogram.MosaicCartogram.CellRegion;
 import model.Cartogram.MosaicCartogram.Coordinate;
@@ -10,6 +15,7 @@ import model.Cartogram.MosaicCartogram.MosaicRegion;
 import model.Network;
 import model.subdivision.Map;
 import model.util.ElementList;
+import model.util.Pair;
 import model.util.Random;
 import model.util.Vector2D;
 
@@ -20,11 +26,11 @@ import model.util.Vector2D;
 public final class ForceDirectedLayout {
 
     private final double INTENSITY = 150.0;
-    //attraction force between two neighbouring regions
+    // attraction force between two neighbouring regions
     private final double ATTRACTION_WEIGHT = 1;
-    //Force when two neighbouring regions overlap
+    // Force when two neighbouring regions overlap
     private final double REPULSION_WEIGHT = 35.0;
-    //force when two non-neighbouring regions overlap
+    // force when two non-neighbouring regions overlap
     private final double NON_NEIGHBOUR_REPULSION_WEIGHT = 40.0;
     private final double TIME_STEP;
     private final double MINIMUM_NORM = 5.0;
@@ -40,7 +46,7 @@ public final class ForceDirectedLayout {
 
     private final MosaicCartogram currentGrid;
     private final Network weakDual;
-    //Contains the guiding shape on the specified coordinate
+    // Contains the guiding shape on the specified coordinate
     private final HashMap<Coordinate, Set<CellRegion>> regionsOnCoordinate;
     private final HashMap<Coordinate, Set<CellRegion>> neighbourRegionsOnCoordinate;
 
@@ -80,9 +86,9 @@ public final class ForceDirectedLayout {
     }
 
     private void translateGuidingShape(MosaicRegion ru, Coordinate translate) {
-        //remove guiding shape from regions on Coordinate and add on new location
+        // remove guiding shape from regions on Coordinate and add on new location
         CellRegion guidingShape = ru.getGuidingShape();
-        //start removing
+        // start removing
         for (Coordinate c : guidingShape.coordinateSet()) {
             regionsOnCoordinate.get(c).remove(guidingShape);
             if (regionsOnCoordinate.get(c).isEmpty()) {
@@ -95,9 +101,9 @@ public final class ForceDirectedLayout {
                 neighbourRegionsOnCoordinate.remove(c);
             }
         }
-        //done removing
+        // done removing
         ru.translateGuidingShape(translate);
-        //start adding
+        // start adding
         for (Coordinate c : guidingShape.coordinateSet()) {
             if (!regionsOnCoordinate.containsKey(c)) {
                 regionsOnCoordinate.put(c, new HashSet<>());
@@ -110,16 +116,30 @@ public final class ForceDirectedLayout {
             }
             neighbourRegionsOnCoordinate.get(c).add(guidingShape);
         }
-        //done adding
+        // done adding
     }
 
-    public boolean runModel(Map map) {
+    public static int currentIter = -1;
 
-        ElementList<MosaicCartogram.Coordinate> translations = new ElementList<>(currentGrid.numberOfRegions(), currentGrid.zeroVector());
+    public boolean runModel(Map map) {
+        currentIter++;
+        int[] REGION_MAP = { 1, 14, 2, 3, 4, 5, 9, 10, 11, 7, 15, 8, 6, 12, 13 };
+        
+        Utils.writeToFile("../../../../gridmaps/rust-wasm/test/fdl/"+(currentIter)+"_input_grid.ron", this.currentGrid.toRon());
+        RonExporter r = new RonExporter();
+        Utils.writeToFile("../../../../gridmaps/rust-wasm/test/fdl/"+(currentIter)+"_input_baditers.ron",
+                r.struct(Utils.enumerate(this.badIterations.stream()).map((Pair<Integer, Integer> p) -> {
+                    int bad = p.getFirst();
+                    int region = p.getSecond();
+                    return r.field("" + REGION_MAP[region], bad);
+                })));
+
+        ElementList<MosaicCartogram.Coordinate> translations = new ElementList<>(currentGrid.numberOfRegions(),
+                currentGrid.zeroVector());
         blocked.assign(currentGrid.numberOfRegions(), false);
         boolean stop = false;
 
-        //Total amount before we stop the looping
+        // Total amount before we stop the looping
         int totalIterations = 20000;
 
         int iterations = 0;
@@ -150,43 +170,50 @@ public final class ForceDirectedLayout {
 
             for (Network.Vertex u : weakDual.vertices()) {
                 if (!blocked.get(u)) {
-                    //move it continously
+                    // move it continously
                     Vector2D positionIncrement = Vector2D.product(forces.get(u), TIME_STEP);
                     Vector2D continuousPosition = continuousPositions.get(u);
                     continuousPosition.add(positionIncrement);
 
                     MosaicCartogram.Coordinate newCoordinate = currentGrid.getContainingCell(continuousPosition);
                     MosaicCartogram.Coordinate discretePosition = discretePositions.get(u);
-                    //if it moved discretely
+                    // if it moved discretely
                     if (!newCoordinate.equals(discretePosition)) {
-                        //move the guiding shape
+                        // move the guiding shape
                         MosaicCartogram.Coordinate translate = newCoordinate.minus(discretePosition);
                         MosaicCartogram.MosaicRegion ru = currentGrid.getRegion(u.getId());
                         translateGuidingShape(ru, translate);
 
                         MosaicCartogram.CellRegion gu = ru.getGuidingShape();
                         if (ru.intersects(gu) || ru.intersectsNeighbours(gu)) {
-                            //if the guidingshape is on top, or next to the region
+                            // if the guidingshape is on top, or next to the region
                             discretePositions.set(u, newCoordinate);
 
-                            //store how far this region has translated
+                            // store how far this region has translated
                             MosaicCartogram.Coordinate translation = translations.get(ru).plus(translate);
                             translations.set(ru, translation);
 
-                            //if a guiding shape has moved a full cell we can stop
+                            // if a guiding shape has moved a full cell we can stop
                             if (translation.norm() > 0) {
                                 stop = true;
                             }
                         } else {
-                            //guiding shape to far away from region, revert
+                            // guiding shape to far away from region, revert
                             translateGuidingShape(ru, translate.times(-1));
                             continuousPosition.subtract(positionIncrement);
                         }
                     }
                 }
-            }//end of for loop
-            //Still in while loop
+            } // end of for loop
+              // Still in while loop
             if (stop) {
+                Utils.writeToFile("../../../../gridmaps/rust-wasm/test/fdl/"+(currentIter)+"_output_grid.ron", this.currentGrid.toRon());
+                Utils.writeToFile("../../../../gridmaps/rust-wasm/test/fdl/"+(currentIter)+"_output_baditers.ron",
+                        r.struct(Utils.enumerate(this.badIterations.stream()).map((Pair<Integer, Integer> p) -> {
+                            int bad = p.getFirst();
+                            int region = p.getSecond();
+                            return r.field("" + region, bad);
+                        })));
                 return true;
             }
         }
@@ -218,16 +245,16 @@ public final class ForceDirectedLayout {
             MosaicCartogram.Coordinate[] regionCoordinates = region.occupiedCoordinates();
             MosaicCartogram.Coordinate[] shapeCoordinates = guidingShape.occupiedCoordinates();
 
-            //randomize the coordinates
+            // randomize the coordinates
             int rRegion = Random.nextInt(regionCoordinates.length);
             int rShape = Random.nextInt(shapeCoordinates.length);
             MosaicCartogram.Coordinate cRegion = regionCoordinates[rRegion];
             MosaicCartogram.Coordinate cShape = shapeCoordinates[rShape];
 
             MosaicCartogram.Coordinate t = cRegion.minus(cShape);
-            //shake the guiding shaped based on position of guiding shape and region
+            // shake the guiding shaped based on position of guiding shape and region
             translateGuidingShape(region, t);
-            //update variables
+            // update variables
             Vector2D barycenter = new Vector2D(guidingShape.continuousBarycenter());
             continuousPositions.set(region, barycenter);
             discretePositions.set(region, currentGrid.getContainingCell(barycenter));
@@ -244,8 +271,8 @@ public final class ForceDirectedLayout {
 
     private void computeForces() {
         for (Network.Vertex u : weakDual.vertices()) {
-            //stores the neighbours of u. 
-            //TODO preprocess
+            // stores the neighbours of u.
+            // TODO preprocess
             Set<Network.Vertex> neighbours = new HashSet<>();
 
             MosaicCartogram.MosaicRegion ru = currentGrid.getRegion(u.getId());
@@ -253,18 +280,18 @@ public final class ForceDirectedLayout {
             forces.set(ru, force);
             // Neighbours are affected by all forces
             for (Network.Vertex v : weakDual.neighbours(u)) {
-                //store the neighbour
+                // store the neighbour
                 neighbours.add(v);
 
                 MosaicCartogram.MosaicRegion rv = currentGrid.getRegion(v.getId());
-                //calculate the forces
+                // calculate the forces
                 Vector2D attraction = attractionForce(ru, rv);
                 Vector2D repulsion = neighbourRepulsionForce(ru, rv);
-                //add the forces
+                // add the forces
                 force.add(attraction);
                 force.add(repulsion);
             }
-            //neighbours now holds all the neighbors of v
+            // neighbours now holds all the neighbors of v
             // Non-neighbours are only affected by repulsion
             for (Network.Vertex v : weakDual.vertices()) {
                 if (!neighbours.contains(v)) {
@@ -292,14 +319,14 @@ public final class ForceDirectedLayout {
         MosaicCartogram.Coordinate t1 = g1.barycenter();
         MosaicCartogram.Coordinate t2 = g2.barycenter();
         //////////////////////////////////////////////////////
-        //get the direction of the force
+        // get the direction of the force
         Vector2D b1 = g1.continuousBarycenter();
         b1.add(t1.toVector2D());
         Vector2D b2 = g2.continuousBarycenter();
         b2.add(t2.toVector2D());
         force.add(Vector2D.difference(b2, b1));
         //////////////////////////////////////////////////////
-        //get the magnitude of the force
+        // get the magnitude of the force
         int distance = distance(g1, t1, g2, t2);
         distance = Math.max(1, distance);
         force.normalize().multiply(INTENSITY * ATTRACTION_WEIGHT * distance);
@@ -314,14 +341,14 @@ public final class ForceDirectedLayout {
         int intersectionSize = 0;
         Vector2D force = new Vector2D(0, 0);
         for (MosaicCartogram.Coordinate c : g1) {
-            //if the regions intersect
+            // if the regions intersect
             if (regionsOnCoordinate.get(c).contains(g2)) {
                 intersectionSize++;
                 Vector2D p1 = r1.getCorrespondingMapPoint(c);
                 Vector2D p2 = r2.getCorrespondingMapPoint(c);
                 Vector2D component = Vector2D.difference(p1, p2).normalize();
-                //direction of vector equals the direction of the 2 regions with regard
-                //to each other
+                // direction of vector equals the direction of the 2 regions with regard
+                // to each other
                 force.add(component);
             }
         }
@@ -343,17 +370,19 @@ public final class ForceDirectedLayout {
         int intersectionSize = 0;
         Vector2D force = new Vector2D(0, 0);
         for (MosaicCartogram.Coordinate c : g1) {
-            //For each coordinate, check if the coordinate or its neighbours contains the other region
+            // For each coordinate, check if the coordinate or its neighbours contains the
+            // other region
             if (regionsOnCoordinate.get(c).contains(g2)
-                    || (neighbourRegionsOnCoordinate.containsKey(c) && neighbourRegionsOnCoordinate.get(c).contains(g2))) {
+                    || (neighbourRegionsOnCoordinate.containsKey(c)
+                            && neighbourRegionsOnCoordinate.get(c).contains(g2))) {
                 intersectionSize++;
-                //get the direction of the force required to push them apart based
-                //on the original map
+                // get the direction of the force required to push them apart based
+                // on the original map
                 Vector2D p1 = r1.getCorrespondingMapPoint(c);
                 Vector2D p2 = r2.getCorrespondingMapPoint(c);
                 Vector2D component = Vector2D.difference(p1, p2).normalize();
                 force.add(component);
-                //stop as soon as we found the first one for performance reasons
+                // stop as soon as we found the first one for performance reasons
                 break;
             }
         }
@@ -368,9 +397,9 @@ public final class ForceDirectedLayout {
 
     }
 
-    //shortest distance between 2 cells
+    // shortest distance between 2 cells
     private int distance(MosaicCartogram.CellRegion h1, MosaicCartogram.Coordinate t1,
-                         MosaicCartogram.CellRegion h2, MosaicCartogram.Coordinate t2) {
+            MosaicCartogram.CellRegion h2, MosaicCartogram.Coordinate t2) {
         int minimumDistance = Integer.MAX_VALUE;
         for (MosaicCartogram.Coordinate c1 : h1) {
             c1 = c1.plus(t1);

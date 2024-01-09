@@ -21,10 +21,14 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Map.Entry;
+import java.util.function.Function;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.StreamSupport;
+
+import Utils.RonExporter;
 import Utils.Utils;
 import model.Network;
 import model.graph.ConnectedComponents;
@@ -408,37 +412,36 @@ public abstract class MosaicCartogram {
         }
     }
 
-    public void export(String fileName) {
-        BufferedWriter bw = null;
-        int[] REGION_MAP = {1,14,2,3,4,5,9,10,11,7,15,8,6,12,13};
-        try {
-            bw = new BufferedWriter(new FileWriter(fileName));
-            bw.write("(\n    cells: [\n");
-            for (Cell c : this.cells()) {
-                bw.write(String.format("        ((\n            x:%d,\n            y:%d,\n            hex:false,\n        ), %d),\n", c.getCoordinate().getComponents()[0],c.getCoordinate().getComponents()[1], REGION_MAP[c.getVertex().getId()]));
-            }
-            bw.write("    ],\n    guiding_shapes: [\n");
+    public String toRon() {
+        RonExporter r = new RonExporter();
+        Function<Coordinate, String> coord = (Coordinate c) -> {
+            int[] components = c.getComponents();
+            return r.tuple(
+                    r.field("x", components[0]),
+                    r.field("y", components[1]),
+                    r.field("hex", "false"));
+        };
 
-            for (int i = 0; i < regions.size(); i++) {
-                MosaicRegion region = regions.get(i);
-                bw.write(String.format("        (\n            id: %d,\n            cells: [\n", REGION_MAP[region.getId()]));
-                for (Coordinate c : region.getGuidingShape().coordinateSet()) {
-                    bw.write(String.format("                (\n                    x:%d,\n                    y:%d,\n                    hex:false,\n                ),\n", c.getComponents()[0],c.getComponents()[1], region.getId()));
-                }
-                bw.write(String.format("            ],\n            translation_continuous: (%.16f, %.16f),\n", region.guidingShapeTranslation.getX(), region.guidingShapeTranslation.getY()));
-                bw.write(String.format("            translation_cell: (\n                x:%d,\n                y:%d,\n                hex:false,\n            ),\n", region.totalTranslation.getComponents()[0], region.totalTranslation.getComponents()[0]));
-                bw.write(String.format("            scale: %.16f,\n        ),\n", region.factor));
-            }
-            bw.write("    ],\n    hex:false,\n)");
-        } catch (IOException ex) {
-            Logger.getLogger(IpeExporter.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                bw.close();
-            } catch (IOException ex) {
-                Logger.getLogger(IpeExporter.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+        int[] REGION_MAP = { 1, 14, 2, 3, 4, 5, 9, 10, 11, 7, 15, 8, 6, 12, 13 };
+        return r.tuple(
+                r.field("cells", r.array(Utils.iterToStream(this.cells(), false).map((Cell c) -> {
+                    return r.tuple(
+                            coord.apply(c.getCoordinate()),
+                            REGION_MAP[c.getVertex().getId()]);
+                }))), r.field("guiding_shapes",
+                        r.array(this.regions.stream().map((MosaicRegion region) -> {
+                            return r.tuple(
+                                    r.field("id", REGION_MAP[region.getId()]),
+                                    r.field("cells", r.array(region.getGuidingShape().coordinateSet().stream()
+                                            .map(coord))),
+                                    r.field("translation_continuous", String.format(
+                                            "(%.16f, %.16f)",
+                                            region.guidingShapeTranslation.getX(),
+                                            region.guidingShapeTranslation.getY())),
+                                    r.field("translation_cell", coord.apply(region.totalTranslation)),
+                                    r.field("scale", String.format("%.16f", region.factor)));
+                        }))),
+                r.field("hex", "false"));
     }
 
     public abstract MosaicCartogram duplicate();
@@ -446,7 +449,8 @@ public abstract class MosaicCartogram {
     /**
      * Assumes that the coordinates are connected.
      */
-    public static ArrayList<Set<Coordinate>> computeHoles(MosaicCartogram mosaic, Set<? extends Coordinate> coordinates) {
+    public static ArrayList<Set<Coordinate>> computeHoles(MosaicCartogram mosaic,
+            Set<? extends Coordinate> coordinates) {
         // Find all white hexagons that have a neighbours in this grid
         Graph neighboursGraph = new Graph();
         LinkedHashMap<Coordinate, Graph.Vertex> coordinateToVertex = new LinkedHashMap<>();
@@ -513,7 +517,8 @@ public abstract class MosaicCartogram {
     /**
      * Assumes that the coordinates are connected.
      */
-    public static ArrayList<Set<Coordinate>> computeHoleBoundaries(MosaicCartogram mosaic, Set<? extends Coordinate> coordinates) {
+    public static ArrayList<Set<Coordinate>> computeHoleBoundaries(MosaicCartogram mosaic,
+            Set<? extends Coordinate> coordinates) {
         // Find all white hexagons that have a neighbours in this grid
         Graph neighboursGraph = new Graph();
         LinkedHashMap<Coordinate, Graph.Vertex> coordinateToVertex = new LinkedHashMap<>();
@@ -597,7 +602,8 @@ public abstract class MosaicCartogram {
             for (int i = 0; i <= SAMPLE; i++) {
                 double ty = 0;
                 for (int j = 0; j <= SAMPLE; j++) {
-                    System.out.println("Region "+f.getLabel().getText()+", iteration "+i+","+j+" / "+SAMPLE);
+                    System.out.println(
+                            "Region " + f.getLabel().getText() + ", iteration " + i + "," + j + " / " + SAMPLE);
                     Pair<CellRegion, Double> regionPair = computeDesiredRegion(f, factor, tx, ty);
                     CellRegion region = regionPair.getFirst();
                     double quality = regionPair.getSecond();
@@ -1017,7 +1023,7 @@ public abstract class MosaicCartogram {
         }
 
         public void translateGuidingShape(Coordinate t) {
-            //TODO: Update overlapping stuff
+            // TODO: Update overlapping stuff
             guidingShape.translate(t);
             totalTranslation = totalTranslation.plus(t);
             Vector2D move = t.toVector2D();

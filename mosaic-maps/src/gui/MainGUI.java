@@ -29,6 +29,8 @@ import parameter.ParameterManager.Application.GridType;
 
 import javax.swing.*;
 
+import Utils.Utils;
+
 public class MainGUI {
 
     // private static final boolean runHonorsAlgorithms = false;
@@ -271,7 +273,8 @@ public class MainGUI {
                 }
                 cartogramPanel.setCartogram(manager.getComponent(0).getCartogram());
                 IpeExporter.exportCartogram(manager.getComponent(0).getCartogram(), "test_cartogram.ipe");
-                manager.getComponent(0).getCartogram().export("../../../../gridmaps/rust-wasm/test/cache/test_cartogram_cross_j.ron");
+                Utils.writeToFile("../../../../gridmaps/rust-wasm/test/cache/test_cartogram_cross_j.ron", manager.getComponent(0).getCartogram().toRon());
+                
                 if (finalRun)
                     System.out.println("Final run with UNIT_DATA = " + unitData);
                 else
